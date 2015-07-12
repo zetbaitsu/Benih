@@ -27,7 +27,7 @@ import id.zelory.benih.fragments.BenihFragment;
 /**
  * Created by zetbaitsu on 7/10/15.
  */
-public class BenihPagerAdapter<Fragment extends BenihFragment> extends FragmentStatePagerAdapter
+public abstract class BenihPagerAdapter<Fragment extends BenihFragment> extends FragmentStatePagerAdapter
 {
     protected List<Fragment> fragments;
     protected List<String> titles;
@@ -46,10 +46,7 @@ public class BenihPagerAdapter<Fragment extends BenihFragment> extends FragmentS
     }
 
     @Override
-    public BenihFragment getItem(int position)
-    {
-        return fragments.get(position);
-    }
+    public abstract Fragment getItem(int position);
 
     @Override
     public int getCount()

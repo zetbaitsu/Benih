@@ -14,12 +14,28 @@
  *  limitations under the License.
  */
 
-package id.zelory.benihtes.networks;
+package id.zelory.benihtes.adapters;
+
+import android.support.v4.app.FragmentManager;
+
+import java.util.List;
+
+import id.zelory.benih.adapters.BenihPagerAdapter;
+import id.zelory.benihtes.fragments.BacaFragment;
 
 /**
- * Created by zetbaitsu on 7/10/15.
+ * Created by zetbaitsu on 7/12/15.
  */
-public interface API
+public class BacaPagerAdapter extends BenihPagerAdapter<BacaFragment>
 {
-    String BASE_URL = "http://apitanipedia.appspot.com";
+    public BacaPagerAdapter(FragmentManager fm, List<BacaFragment> bacaFragments)
+    {
+        super(fm, bacaFragments);
+    }
+
+    @Override
+    public BacaFragment getItem(int position)
+    {
+        return fragments.get(position);
+    }
 }

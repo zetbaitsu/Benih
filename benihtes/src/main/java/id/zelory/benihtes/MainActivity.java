@@ -1,23 +1,23 @@
 package id.zelory.benihtes;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+
 import id.zelory.benih.BenihActivity;
 import id.zelory.benih.networks.ServiceGenerator;
+import id.zelory.benih.utils.BenihScheduler;
+import id.zelory.benih.views.BenihRecyclerView;
 import id.zelory.benihtes.adapters.BeritaRecyclerAdapter;
-import id.zelory.benihtes.networks.API;
-import id.zelory.benihtes.networks.clients.BeritaClient;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
+import id.zelory.benihtes.models.Berita;
+import id.zelory.benihtes.networks.clients.TaniPediaClient;
 
 public class MainActivity extends BenihActivity
 {
-    private RecyclerView recyclerView;
+    private BenihRecyclerView recyclerView;
     private BeritaRecyclerAdapter adapter;
 
     @Override
@@ -29,24 +29,24 @@ public class MainActivity extends BenihActivity
     @Override
     protected void onViewReady(Bundle savedInstanceState)
     {
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView = (BenihRecyclerView) findViewById(R.id.recycler_view);
+        recyclerView.setUpAsList();
 
-        BeritaClient client = ServiceGenerator.createService(BeritaClient.class, API.BASE_URL);
+        TaniPediaClient client = ServiceGenerator.createService(TaniPediaClient.class, TaniPediaClient.BASE_URL);
 
         client.getAllBerita()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
+                .compose(BenihScheduler.getInstance().applySchedulers(BenihScheduler.Type.IO))
                 .subscribe(data -> {
                     adapter = new BeritaRecyclerAdapter(this, data);
                     recyclerView.setAdapter(adapter);
-
-                    adapter.setOnItemClickListener((view, position) -> log(adapter.getData().get(position).getJudul()));
+                    adapter.setOnItemClickListener((view, position) -> {
+                        Intent intent = new Intent(this, BacaActivity.class);
+                        intent.putParcelableArrayListExtra("data", (ArrayList<Berita>) adapter.getData());
+                        intent.putExtra("pos", position);
+                        startActivity(intent);
+                    });
                 }, throwable -> log(throwable.getMessage()));
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -59,8 +59,14 @@ public class MainActivity extends BenihActivity
     public boolean onOptionsItemSelected(MenuItem item)
     {
         int id = item.getItemId();
-
-        return id == R.id.action_settings || super.onOptionsItemSelected(item);
+        switch (id)
+        {
+            case R.id.action_settings:
+                Intent intent = new Intent(this, SecondActivity.class);
+                startActivity(intent);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
 
     }
 }

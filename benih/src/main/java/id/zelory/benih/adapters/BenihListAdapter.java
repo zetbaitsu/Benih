@@ -64,6 +64,39 @@ public abstract class BenihListAdapter<Data> extends BaseAdapter
         return data;
     }
 
+    public void add(Data item)
+    {
+        data.add(item);
+        notifyDataSetChanged();
+    }
+
+    public void add(Data item, int position)
+    {
+        data.add(position, item);
+        notifyDataSetChanged();
+    }
+
+    public void add(List<Data> items)
+    {
+        for (Data item : items)
+        {
+            add(item);
+        }
+    }
+
+    public void remove(int position)
+    {
+        data.remove(position);
+        notifyDataSetChanged();
+    }
+
+    public void remove(Data item)
+    {
+        int position = data.indexOf(item);
+        data.remove(position);
+        notifyDataSetChanged();
+    }
+
     protected void log(String message)
     {
         try

@@ -23,6 +23,7 @@ import com.google.gson.internal.bind.DateTypeAdapter;
 
 import java.util.Date;
 
+import id.zelory.benih.BuildConfig;
 import retrofit.RestAdapter;
 import retrofit.converter.GsonConverter;
 
@@ -43,7 +44,7 @@ public class ServiceGenerator
                 .create();
 
         RestAdapter.Builder builder = new RestAdapter.Builder()
-                .setLogLevel(RestAdapter.LogLevel.FULL)
+                .setLogLevel(RestAdapter.LogLevel.BASIC)
                 .setConverter(new GsonConverter(gson))
                 .setEndpoint(baseUrl);
 

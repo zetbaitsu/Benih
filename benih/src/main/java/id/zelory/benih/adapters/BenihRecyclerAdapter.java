@@ -73,12 +73,45 @@ public abstract class BenihRecyclerAdapter<Data, Holder extends BenihViewHolder>
         return data;
     }
 
+    public void add(Data item)
+    {
+        data.add(item);
+        notifyItemInserted(data.size() - 1);
+    }
+
+    public void add(Data item, int position)
+    {
+        data.add(position, item);
+        notifyItemInserted(position);
+    }
+
+    public void add(List<Data> items)
+    {
+        for (Data item : items)
+        {
+            add(item);
+        }
+    }
+
+    public void remove(int position)
+    {
+        data.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void remove(Data item)
+    {
+        int position = data.indexOf(item);
+        data.remove(position);
+        notifyItemRemoved(position);
+    }
+
     protected void log(String message)
     {
         try
         {
             Log.d(getClass().getSimpleName(), message);
-        }catch (Exception e)
+        } catch (Exception e)
         {
             Log.d(getClass().getSimpleName(), "Null message.");
         }

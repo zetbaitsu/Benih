@@ -27,23 +27,58 @@ import android.view.ViewGroup;
 /**
  * Created by zetbaitsu on 7/10/15.
  */
-public abstract class BenihFragment extends Fragment
+public abstract class BenihFragment<Data> extends Fragment
 {
+    private View view;
+    protected Data data;
+
+    public BenihFragment()
+    {
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        return LayoutInflater.from(getActivity()).inflate(getFragmentView(), container, false);
+        view = LayoutInflater.from(getActivity()).inflate(getFragmentView(), container, false);
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState)
+    {
+        super.onActivityCreated(savedInstanceState);
+        onViewReady(savedInstanceState, view);
+    }
+
+    public void setData(Data data)
+    {
+        this.data = data;
+    }
+
+    public Data getData()
+    {
+        return data;
     }
 
     protected abstract int getFragmentView();
+
+    protected abstract void onViewReady(@Nullable Bundle savedInstanceState, View view);
+
+    @Override
+    public void onDestroy()
+    {
+        view = null;
+        super.onDestroy();
+    }
 
     protected void log(String message)
     {
         try
         {
             Log.d(getClass().getSimpleName(), message);
-        }catch (Exception e)
+        } catch (Exception e)
         {
             Log.d(getClass().getSimpleName(), "Null message.");
         }

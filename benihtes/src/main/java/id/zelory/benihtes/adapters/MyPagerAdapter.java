@@ -14,23 +14,29 @@
  *  limitations under the License.
  */
 
-package id.zelory.benihtes.networks.clients;
+package id.zelory.benihtes.adapters;
+
+import android.support.v4.app.FragmentManager;
 
 import java.util.List;
 
-import id.zelory.benihtes.models.Berita;
-import retrofit.http.GET;
-import retrofit.http.Query;
-import rx.Observable;
+import id.zelory.benih.adapters.BenihPagerAdapter;
+import id.zelory.benihtes.fragments.MyFragment;
 
 /**
- * Created by zetbaitsu on 7/10/15.
+ * Created by zetbaitsu on 7/12/15.
  */
-public interface BeritaClient
+public class MyPagerAdapter extends BenihPagerAdapter<MyFragment>
 {
-    @GET("/berita")
-    Observable<List<Berita>> getAllBerita();
+    public MyPagerAdapter(FragmentManager fm, List<MyFragment> myFragments, List<String> titles)
+    {
+        super(fm, myFragments, titles);
+    }
 
-    @GET("/berita")
-    Observable<Berita> getBerita(@Query("url") String url);
+    @Override
+    public MyFragment getItem(int position)
+    {
+        fragments.get(position).setData("This is fragment " + (position + 1));
+        return fragments.get(position);
+    }
 }
