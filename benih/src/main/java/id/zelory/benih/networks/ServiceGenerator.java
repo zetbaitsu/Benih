@@ -23,7 +23,6 @@ import com.google.gson.internal.bind.DateTypeAdapter;
 
 import java.util.Date;
 
-import id.zelory.benih.BuildConfig;
 import retrofit.RestAdapter;
 import retrofit.converter.GsonConverter;
 
