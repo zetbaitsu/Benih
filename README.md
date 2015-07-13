@@ -4,6 +4,37 @@ Benih merupakan template standar dari aplikasi android yang dibuat oleh Zelory. 
 
 Contoh Penggunaan
 -------
+Tambahkan perintah berikut pada build.gradle mu:
+
+```groovy
+apply plugin: 'me.tatarka.retrolambda'
+
+android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'me.tatarka:gradle-retrolambda:3.2.0'
+    }
+}
+
+repositories {
+    maven { url "http://dl.bintray.com/zetbaitsu/maven" }
+    mavenCentral()
+}
+
+dependencies {
+    compile 'id.zelory.benih:benih:0.0.3'
+}
+```
+
 Berikut ini adalah salah satu contoh penggunaan Benih untuk melakukan parsing JSON dari web services (API) yang kemudian akan di ubah ke dalam bentuk Object Java dan kemudian ditampilkan dalam RecyclerView. Sangat mudah dan simple, untuk melihat contoh lainnya silahkan lihat pada aplikasi <a href="https://github.com/zetbaitsu/Benih/tree/master/benihtes">benihtes</a>
 
 ```java
