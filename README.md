@@ -26,7 +26,6 @@ buildscript {
 }
 
 repositories {
-    maven { url "http://dl.bintray.com/zetbaitsu/maven" }
     mavenCentral()
 }
 
