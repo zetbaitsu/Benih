@@ -41,7 +41,13 @@ public abstract class BenihListAdapter<Data> extends BaseAdapter
     @Override
     public int getCount()
     {
-        return data.size();
+        try
+        {
+            return data.size();
+        } catch (Exception e)
+        {
+            return 0;
+        }
     }
 
     @Override
@@ -97,12 +103,18 @@ public abstract class BenihListAdapter<Data> extends BaseAdapter
         notifyDataSetChanged();
     }
 
+    public void clear()
+    {
+        data.clear();
+        notifyDataSetChanged();
+    }
+
     protected void log(String message)
     {
         try
         {
             Log.d(getClass().getSimpleName(), message);
-        }catch (Exception e)
+        } catch (Exception e)
         {
             Log.d(getClass().getSimpleName(), "Null message.");
         }

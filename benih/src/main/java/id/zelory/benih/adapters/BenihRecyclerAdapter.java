@@ -49,7 +49,13 @@ public abstract class BenihRecyclerAdapter<Data, Holder extends BenihViewHolder>
     @Override
     public int getItemCount()
     {
-        return data.size();
+        try
+        {
+            return data.size();
+        } catch (Exception e)
+        {
+            return 0;
+        }
     }
 
     @Override
@@ -104,6 +110,12 @@ public abstract class BenihRecyclerAdapter<Data, Holder extends BenihViewHolder>
         int position = data.indexOf(item);
         data.remove(position);
         notifyItemRemoved(position);
+    }
+
+    public void clear()
+    {
+        data.clear();
+        notifyDataSetChanged();
     }
 
     protected void log(String message)
