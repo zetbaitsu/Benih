@@ -24,6 +24,11 @@ import android.content.SharedPreferences;
  */
 public class PrefUtils
 {
+    private PrefUtils()
+    {
+
+    }
+
     public static void putString(Context context, String key, String isi)
     {
         SharedPreferences.Editor editor = context.getSharedPreferences("Zelory", Context.MODE_PRIVATE).edit();
