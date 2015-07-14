@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Benih by zetbaitsu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Benih</h1>
+      <h2 class="project-tagline">Zelory standard android apps</h2>
+      <a href="https://github.com/zetbaitsu/Benih" class="btn">View on GitHub</a>
+      <a href="https://github.com/zetbaitsu/Benih/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/zetbaitsu/Benih/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="benih" class="anchor" href="#benih" aria-hidden="true"><span class="octicon octicon-link"></span></a>Benih</h1>
+
+<p>Benih merupakan template standar dari aplikasi android yang dibuat oleh Zelory. Benih sudah menangani beberapa hal yang sering menjadi komponen utama sebuah aplikasi android. Dengan Benih, developer tidak perlu dipusingkan lagi dengan hal-hal yang bukan esensial lagi, tapi cukup fokus pada inti dari permasalahan yang ingin diselesaikan. Benih akan mempermudah pengembangan aplikasi android, hal-hal seperti penanganan network, web services, load gambar dari internet, adapter recyclerview, handle item click di recyclerview dsb sudah ditangani dengan optimal. Benih diharapkan bisa mempermudah dan mempercepat proses pengembangan aplikasi.</p>
+
+<h2>
+<a id="contoh-penggunaan" class="anchor" href="#contoh-penggunaan" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contoh Penggunaan</h2>
+
+<p>Tambahkan perintah berikut pada build.gradle mu:</p>
+
+<div class="highlight highlight-groovy"><pre>apply <span class="pl-c1">plugin</span>: <span class="pl-s"><span class="pl-pds">'</span>me.tatarka.retrolambda<span class="pl-pds">'</span></span>
+
+android {
+    compileOptions {
+        sourceCompatibility <span class="pl-k">JavaVersion</span><span class="pl-k">.</span><span class="pl-c1">VERSION_1_8</span>
+        targetCompatibility <span class="pl-k">JavaVersion</span><span class="pl-k">.</span><span class="pl-c1">VERSION_1_8</span>
+    }
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath <span class="pl-s"><span class="pl-pds">'</span>me.tatarka:gradle-retrolambda:3.2.0<span class="pl-pds">'</span></span>
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile <span class="pl-s"><span class="pl-pds">'</span>id.zelory.benih:benih:0.0.4<span class="pl-pds">'</span></span>
+}</pre></div>
+
+<p>Berikut ini adalah salah satu contoh penggunaan Benih untuk melakukan parsing JSON dari web services (API) yang kemudian akan di ubah ke dalam bentuk Object Java dan kemudian ditampilkan dalam RecyclerView. Sangat mudah dan simple, untuk melihat contoh lainnya silahkan lihat pada aplikasi <a href="https://github.com/zetbaitsu/Benih/tree/master/benihtes">benihtes</a></p>
+
+<div class="highlight highlight-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">MainActivity</span> <span class="pl-k">extends</span> <span class="pl-e">BenihActivity</span>
+{
+    <span class="pl-k">private</span> <span class="pl-smi">BenihRecyclerView</span> recyclerView;
+    <span class="pl-k">private</span> <span class="pl-smi">BeritaRecyclerAdapter</span> adapter;
+
+    <span class="pl-k">@Override</span>
+    <span class="pl-k">protected</span> <span class="pl-k">int</span> <span class="pl-en">getActivityView</span>()
+    {
+        <span class="pl-k">return</span> <span class="pl-smi">R</span><span class="pl-k">.</span>layout<span class="pl-k">.</span>activity_main;
+    }
+
+    <span class="pl-k">@Override</span>
+    <span class="pl-k">protected</span> <span class="pl-k">void</span> <span class="pl-en">onViewReady</span>(<span class="pl-smi">Bundle</span> <span class="pl-v">savedInstanceState</span>)
+    {
+        recyclerView <span class="pl-k">=</span> (<span class="pl-smi">BenihRecyclerView</span>) findViewById(<span class="pl-smi">R</span><span class="pl-k">.</span>id<span class="pl-k">.</span>recycler_view);
+        recyclerView<span class="pl-k">.</span>setUpAsList();
+
+        <span class="pl-smi">TaniPediaClient</span> client <span class="pl-k">=</span> <span class="pl-smi">ServiceGenerator</span><span class="pl-k">.</span>createService(<span class="pl-smi">TaniPediaClient</span><span class="pl-k">.</span>class, <span class="pl-smi">TaniPediaClient</span><span class="pl-c1"><span class="pl-k">.</span>BASE_URL</span>);
+
+        client<span class="pl-k">.</span>getAllBerita()
+                .compose(<span class="pl-smi">BenihScheduler</span><span class="pl-k">.</span>getInstance()<span class="pl-k">.</span>applySchedulers(<span class="pl-smi">BenihScheduler</span><span class="pl-k">.</span><span class="pl-smi">Type</span><span class="pl-c1"><span class="pl-k">.</span>IO</span>))
+                .subscribe(data <span class="pl-k">-</span><span class="pl-k">&gt;</span> {
+                    adapter <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">BeritaRecyclerAdapter</span>(<span class="pl-v">this</span>, data);
+                    recyclerView<span class="pl-k">.</span>setAdapter(adapter);
+                    adapter<span class="pl-k">.</span>setOnItemClickListener((view, position) <span class="pl-k">-</span><span class="pl-k">&gt;</span> {
+                        <span class="pl-smi">Intent</span> intent <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">Intent</span>(<span class="pl-v">this</span>, <span class="pl-smi">BacaActivity</span><span class="pl-k">.</span>class);
+                        intent<span class="pl-k">.</span>putParcelableArrayListExtra(<span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span>, (<span class="pl-k">ArrayList&lt;<span class="pl-smi">Berita</span>&gt;</span>) adapter<span class="pl-k">.</span>getData());
+                        intent<span class="pl-k">.</span>putExtra(<span class="pl-s"><span class="pl-pds">"</span>pos<span class="pl-pds">"</span></span>, position);
+                        startActivity(intent);
+                    });
+                }, throwable <span class="pl-k">-</span><span class="pl-k">&gt;</span> log(throwable<span class="pl-k">.</span>getMessage()));
+    }
+}</pre></div>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
+
+<pre><code>Copyright (c) 2015 Zetra.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+</code></pre>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/zetbaitsu/Benih">Benih</a> is maintained by <a href="https://github.com/zetbaitsu">zetbaitsu</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
+
