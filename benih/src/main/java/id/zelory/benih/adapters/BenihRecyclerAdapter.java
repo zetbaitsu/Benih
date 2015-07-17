@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,6 +34,12 @@ public abstract class BenihRecyclerAdapter<Data, Holder extends BenihViewHolder>
     protected Context context;
     protected List<Data> data;
     protected OnItemClickListener clickListener;
+
+    public BenihRecyclerAdapter(Context context)
+    {
+        this.context = context;
+        data = new ArrayList<>();
+    }
 
     public BenihRecyclerAdapter(Context context, List<Data> data)
     {

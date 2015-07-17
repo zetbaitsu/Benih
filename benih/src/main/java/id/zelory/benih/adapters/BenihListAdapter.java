@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,6 +32,12 @@ public abstract class BenihListAdapter<Data> extends BaseAdapter
 {
     protected Context context;
     protected List<Data> data;
+
+    public BenihListAdapter(Context context)
+    {
+        this.context = context;
+        data = new ArrayList<>();
+    }
 
     public BenihListAdapter(Context context, List<Data> data)
     {
