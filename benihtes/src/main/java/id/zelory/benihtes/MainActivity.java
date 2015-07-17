@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import id.zelory.benih.BenihActivity;
 import id.zelory.benih.networks.ServiceGenerator;
+import id.zelory.benih.utils.BenihBus;
 import id.zelory.benih.utils.BenihScheduler;
 import id.zelory.benih.views.BenihRecyclerView;
 import id.zelory.benihtes.adapters.BeritaRecyclerAdapter;
@@ -29,6 +30,10 @@ public class MainActivity extends BenihActivity
     @Override
     protected void onViewReady(Bundle savedInstanceState)
     {
+        BenihBus.getInstance()
+                .receive()
+                .subscribe(o -> log(o.toString()));
+
         recyclerView = (BenihRecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setUpAsList();
 
@@ -37,6 +42,7 @@ public class MainActivity extends BenihActivity
         client.getAllBerita()
                 .compose(BenihScheduler.getInstance().applySchedulers(BenihScheduler.Type.IO))
                 .subscribe(data -> {
+                    BenihBus.getInstance().send("Download selesai");
                     adapter = new BeritaRecyclerAdapter(this, data);
                     recyclerView.setAdapter(adapter);
                     adapter.setOnItemClickListener((view, position) -> {
@@ -45,14 +51,16 @@ public class MainActivity extends BenihActivity
                         intent.putExtra("pos", position);
                         startActivity(intent);
                     });
-
                     adapter.setOnLongItemClickListener((view, position) -> adapter.remove(position));
+
                 }, throwable -> log(throwable.getMessage()));
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
+        BenihBus.getInstance().send("onCreateOptionMenu()");
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -60,6 +68,7 @@ public class MainActivity extends BenihActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
+        BenihBus.getInstance().send("onOptionsMenuSelected");
         int id = item.getItemId();
         switch (id)
         {
