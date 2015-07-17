@@ -32,7 +32,8 @@ import id.zelory.benihtes.models.Berita;
 /**
  * Created by zetbaitsu on 7/10/15.
  */
-public class BeritaRecyclerAdapter extends BenihRecyclerAdapter<Berita, BeritaRecyclerAdapter.BeritaHolder>
+public class BeritaRecyclerAdapter extends
+        BenihRecyclerAdapter<Berita, BeritaRecyclerAdapter.BeritaHolder>
 {
     public BeritaRecyclerAdapter(Context context, List<Berita> data)
     {
@@ -43,7 +44,7 @@ public class BeritaRecyclerAdapter extends BenihRecyclerAdapter<Berita, BeritaRe
     public BeritaHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         View view = LayoutInflater.from(context).inflate(R.layout.item_berita, parent, false);
-        return new BeritaHolder(view, clickListener);
+        return new BeritaHolder(view, itemClickListener, longItemClickListener);
     }
 
     @Override
@@ -56,9 +57,9 @@ public class BeritaRecyclerAdapter extends BenihRecyclerAdapter<Berita, BeritaRe
     {
         TextView judul;
 
-        public BeritaHolder(View itemView, OnItemClickListener clickListener)
+        public BeritaHolder(View itemView, OnItemClickListener itemClickListener, OnLongItemClickListener longItemClickListener)
         {
-            super(itemView, clickListener);
+            super(itemView, itemClickListener, longItemClickListener);
             judul = (TextView) itemView.findViewById(R.id.text);
         }
     }

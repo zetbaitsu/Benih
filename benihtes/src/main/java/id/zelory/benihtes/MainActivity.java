@@ -45,6 +45,8 @@ public class MainActivity extends BenihActivity
                         intent.putExtra("pos", position);
                         startActivity(intent);
                     });
+
+                    adapter.setOnLongItemClickListener((view, position) -> adapter.remove(position));
                 }, throwable -> log(throwable.getMessage()));
     }
 

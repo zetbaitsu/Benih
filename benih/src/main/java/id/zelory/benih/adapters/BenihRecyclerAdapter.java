@@ -33,7 +33,8 @@ public abstract class BenihRecyclerAdapter<Data, Holder extends BenihViewHolder>
 {
     protected Context context;
     protected List<Data> data;
-    protected OnItemClickListener clickListener;
+    protected OnItemClickListener itemClickListener;
+    protected OnLongItemClickListener longItemClickListener;
 
     public BenihRecyclerAdapter(Context context)
     {
@@ -78,7 +79,17 @@ public abstract class BenihRecyclerAdapter<Data, Holder extends BenihViewHolder>
 
     public void setOnItemClickListener(OnItemClickListener itemClickListener)
     {
-        this.clickListener = itemClickListener;
+        this.itemClickListener = itemClickListener;
+    }
+
+    public interface OnLongItemClickListener
+    {
+        void onLongItemClick(View view, int position);
+    }
+
+    public void setOnLongItemClickListener(OnLongItemClickListener longItemClickListener)
+    {
+        this.longItemClickListener = longItemClickListener;
     }
 
     public List<Data> getData()

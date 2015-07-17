@@ -23,23 +23,27 @@ import android.view.View;
 /**
  * Created by zetbaitsu on 7/10/15.
  */
-public class BenihViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
+public class BenihViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
+        View.OnLongClickListener
 {
-    private BenihRecyclerAdapter.OnItemClickListener clickListener;
+    private BenihRecyclerAdapter.OnItemClickListener itemClickListener;
+    private BenihRecyclerAdapter.OnLongItemClickListener longItemClickListener;
 
-    public BenihViewHolder(View itemView, BenihRecyclerAdapter.OnItemClickListener clickListener)
+    public BenihViewHolder(View itemView, BenihRecyclerAdapter.OnItemClickListener itemClickListener, BenihRecyclerAdapter.OnLongItemClickListener longItemClickListener)
     {
         super(itemView);
-        this.clickListener = clickListener;
+        this.itemClickListener = itemClickListener;
+        this.longItemClickListener = longItemClickListener;
         itemView.setOnClickListener(this);
+        itemView.setOnLongClickListener(this);
     }
 
     @Override
     public void onClick(View v)
     {
-        if (clickListener != null)
+        if (itemClickListener != null)
         {
-            clickListener.onItemClick(v, getAdapterPosition());
+            itemClickListener.onItemClick(v, getAdapterPosition());
         }
     }
 
@@ -48,9 +52,21 @@ public class BenihViewHolder extends RecyclerView.ViewHolder implements View.OnC
         try
         {
             Log.d(getClass().getSimpleName(), message);
-        }catch (Exception e)
+        } catch (Exception e)
         {
             Log.d(getClass().getSimpleName(), "Null message.");
         }
+    }
+
+    @Override
+    public boolean onLongClick(View v)
+    {
+        if (longItemClickListener != null)
+        {
+            longItemClickListener.onLongItemClick(v, getAdapterPosition());
+            return true;
+        }
+
+        return false;
     }
 }
