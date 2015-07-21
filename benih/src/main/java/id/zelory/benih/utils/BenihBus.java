@@ -27,6 +27,7 @@ import rx.subjects.Subject;
 public class BenihBus
 {
     private static final BenihBus benihBus = new BenihBus();
+    private final Subject<Object, Object> bus = new SerializedSubject<>(PublishSubject.create());
 
     private BenihBus()
     {
@@ -37,8 +38,6 @@ public class BenihBus
         return benihBus;
     }
 
-    private final Subject<Object, Object> bus = new SerializedSubject<>(PublishSubject.create());
-
     public void send(Object o)
     {
         bus.onNext(o);
@@ -47,5 +46,10 @@ public class BenihBus
     public Observable<Object> receive()
     {
         return bus.compose(BenihScheduler.getInstance().applySchedulers(BenihScheduler.Type.NEW_THREAD));
+    }
+
+    public boolean hasObservers()
+    {
+        return bus.hasObservers();
     }
 }
