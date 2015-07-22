@@ -35,9 +35,9 @@ import id.zelory.benihtes.models.Berita;
 public class BeritaRecyclerAdapter extends
         BenihRecyclerAdapter<Berita, BeritaRecyclerAdapter.BeritaHolder>
 {
-    public BeritaRecyclerAdapter(Context context, List<Berita> data)
+    public BeritaRecyclerAdapter(Context context)
     {
-        super(context, data);
+        super(context);
     }
 
     @Override

@@ -11,6 +11,7 @@ import id.zelory.benih.BenihActivity;
 import id.zelory.benih.networks.ServiceGenerator;
 import id.zelory.benih.utils.BenihBus;
 import id.zelory.benih.utils.BenihScheduler;
+import id.zelory.benih.utils.BenihWorker;
 import id.zelory.benih.views.BenihRecyclerView;
 import id.zelory.benihtes.adapters.BeritaRecyclerAdapter;
 import id.zelory.benihtes.models.Berita;
@@ -31,29 +32,56 @@ public class MainActivity extends BenihActivity
     protected void onViewReady(Bundle savedInstanceState)
     {
         BenihBus.receive()
-                .subscribe(o -> log(o.toString()));
+                .subscribe(o -> log(o.toString()), throwable -> log(throwable.getMessage()));
+
+        adapter = new BeritaRecyclerAdapter(this);
+        adapter.setOnItemClickListener((view, position) -> {
+            Intent intent = new Intent(this, BacaActivity.class);
+            intent.putParcelableArrayListExtra("data", (ArrayList<Berita>) adapter.getData());
+            intent.putExtra("pos", position);
+            startActivity(intent);
+        });
+        adapter.setOnLongItemClickListener((view, position) -> adapter.remove(position));
 
         recyclerView = (BenihRecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setUpAsList();
+        recyclerView.setAdapter(adapter);
 
         TaniPediaClient client = ServiceGenerator.createService(TaniPediaClient.class, TaniPediaClient.BASE_URL);
-
         client.getAllBerita()
                 .compose(BenihScheduler.applySchedulers(BenihScheduler.Type.IO))
-                .subscribe(data -> {
-                    BenihBus.send("Download selesai");
-                    adapter = new BeritaRecyclerAdapter(this, data);
-                    recyclerView.setAdapter(adapter);
-                    adapter.setOnItemClickListener((view, position) -> {
-                        Intent intent = new Intent(this, BacaActivity.class);
-                        intent.putParcelableArrayListExtra("data", (ArrayList<Berita>) adapter.getData());
-                        intent.putExtra("pos", position);
-                        startActivity(intent);
-                    });
-                    adapter.setOnLongItemClickListener((view, position) -> adapter.remove(position));
+                .subscribe(adapter::add, throwable -> log(throwable.getMessage()));
 
-                }, throwable -> log(throwable.getMessage()));
+        BenihWorker.doThis(MainActivity.this::doSomeThing)
+                .subscribe(o -> log(o.toString()), throwable -> log(throwable.getMessage()));
 
+        for (int i = 0; i < 10; i++)
+        {
+            final int thread = i;
+            BenihWorker.doThis(() -> {
+                for (int j = 0; j < 10000; j++)
+                {
+                    for (int k = 0; k < j; k++)
+                    {
+                        int a = j;
+                        int b = k;
+                        int c = a * k + b * j;
+                        c = c / (j - k);
+                    }
+                }
+            }).subscribe(o -> log("Worker " + thread + " is done."), throwable -> log(throwable.getMessage()));
+        }
+    }
+
+    void doSomeThing()
+    {
+        for (int i = 0; i < 1000000000; i++)
+        {
+            int a = i;
+            int b = a + 1;
+            int c = b * 2;
+            a = a * c / b;
+        }
     }
 
     @Override

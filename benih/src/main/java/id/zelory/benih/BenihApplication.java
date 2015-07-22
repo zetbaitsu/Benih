@@ -17,11 +17,40 @@
 package id.zelory.benih;
 
 import android.app.Application;
+import android.util.Log;
+
+import id.zelory.benih.utils.BenihBus;
+import rx.functions.Action1;
 
 /**
  * Created by zetbaitsu on 7/13/15.
  */
 public class BenihApplication extends Application
 {
+    @Override
+    public void onCreate()
+    {
+        super.onCreate();
+        log("Apps starting");
+        BenihBus.receive()
+                .subscribe(new Action1<Object>()
+                {
+                    @Override
+                    public void call(Object o)
+                    {
+                        log("From apps " + o.toString());
+                    }
+                });
+    }
 
+    protected void log(String message)
+    {
+        try
+        {
+            Log.d(getClass().getSimpleName(), message);
+        } catch (Exception e)
+        {
+            Log.d(getClass().getSimpleName(), "Null message.");
+        }
+    }
 }
