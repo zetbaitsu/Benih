@@ -26,29 +26,23 @@ import rx.subjects.Subject;
  */
 public class BenihBus
 {
-    private static final BenihBus benihBus = new BenihBus();
-    private final Subject<Object, Object> bus = new SerializedSubject<>(PublishSubject.create());
+    private static final Subject<Object, Object> bus = new SerializedSubject<>(PublishSubject.create());
 
     private BenihBus()
     {
     }
 
-    public static BenihBus getInstance()
-    {
-        return benihBus;
-    }
-
-    public void send(Object o)
+    public static void send(Object o)
     {
         bus.onNext(o);
     }
 
-    public Observable<Object> receive()
+    public static Observable<Object> receive()
     {
-        return bus.compose(BenihScheduler.getInstance().applySchedulers(BenihScheduler.Type.NEW_THREAD));
+        return bus.compose(BenihScheduler.applySchedulers(BenihScheduler.Type.NEW_THREAD));
     }
 
-    public boolean hasObservers()
+    public static boolean hasObservers()
     {
         return bus.hasObservers();
     }

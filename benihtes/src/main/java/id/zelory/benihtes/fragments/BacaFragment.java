@@ -47,7 +47,7 @@ public class BacaFragment extends BenihFragment<Berita>
         TaniPediaClient client = ServiceGenerator.createService(TaniPediaClient.class, TaniPediaClient.BASE_URL);
 
         client.getBerita(data.getAlamat())
-                .compose(BenihScheduler.getInstance().applySchedulers(BenihScheduler.Type.IO))
+                .compose(BenihScheduler.applySchedulers(BenihScheduler.Type.IO))
                 .subscribe(berita -> textView.setText(berita.getIsi()), throwable -> log(throwable.getMessage()));
     }
 }

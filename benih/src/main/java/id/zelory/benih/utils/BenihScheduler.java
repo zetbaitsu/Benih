@@ -25,9 +25,7 @@ import rx.schedulers.Schedulers;
  */
 public class BenihScheduler
 {
-    private final static BenihScheduler benihScheduler = new BenihScheduler();
-
-    private final Observable.Transformer newThread = new Observable.Transformer()
+    private final static Observable.Transformer newThread = new Observable.Transformer()
     {
         @Override
         public Observable call(Object o)
@@ -37,7 +35,7 @@ public class BenihScheduler
         }
     };
 
-    private final Observable.Transformer io = new Observable.Transformer()
+    private final static Observable.Transformer io = new Observable.Transformer()
     {
         @Override
         public Observable call(Object o)
@@ -47,7 +45,7 @@ public class BenihScheduler
         }
     };
 
-    private final Observable.Transformer computation = new Observable.Transformer()
+    private final static Observable.Transformer computation = new Observable.Transformer()
     {
         @Override
         public Observable call(Object o)
@@ -62,13 +60,8 @@ public class BenihScheduler
 
     }
 
-    public static BenihScheduler getInstance()
-    {
-        return benihScheduler;
-    }
-
     @SuppressWarnings("unchecked")
-    public <T> Observable.Transformer<T, T> applySchedulers(Type type)
+    public static  <T> Observable.Transformer<T, T> applySchedulers(Type type)
     {
         switch (type)
         {

@@ -30,8 +30,7 @@ public class MainActivity extends BenihActivity
     @Override
     protected void onViewReady(Bundle savedInstanceState)
     {
-        BenihBus.getInstance()
-                .receive()
+        BenihBus.receive()
                 .subscribe(o -> log(o.toString()));
 
         recyclerView = (BenihRecyclerView) findViewById(R.id.recycler_view);
@@ -40,9 +39,9 @@ public class MainActivity extends BenihActivity
         TaniPediaClient client = ServiceGenerator.createService(TaniPediaClient.class, TaniPediaClient.BASE_URL);
 
         client.getAllBerita()
-                .compose(BenihScheduler.getInstance().applySchedulers(BenihScheduler.Type.IO))
+                .compose(BenihScheduler.applySchedulers(BenihScheduler.Type.IO))
                 .subscribe(data -> {
-                    BenihBus.getInstance().send("Download selesai");
+                    BenihBus.send("Download selesai");
                     adapter = new BeritaRecyclerAdapter(this, data);
                     recyclerView.setAdapter(adapter);
                     adapter.setOnItemClickListener((view, position) -> {
@@ -60,7 +59,7 @@ public class MainActivity extends BenihActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        BenihBus.getInstance().send("onCreateOptionMenu()");
+        BenihBus.send("onCreateOptionMenu()");
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -68,7 +67,7 @@ public class MainActivity extends BenihActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        BenihBus.getInstance().send("onOptionsMenuSelected");
+        BenihBus.send("onOptionsMenuSelected");
         int id = item.getItemId();
         switch (id)
         {
