@@ -19,10 +19,13 @@ package id.zelory.benih.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import id.zelory.benih.BenihActivity;
 
 /**
  * Created by zetbaitsu on 7/10/15.
@@ -82,5 +85,43 @@ public abstract class BenihFragment<Data> extends Fragment
         {
             Log.d(getClass().getSimpleName(), "Null message.");
         }
+    }
+
+    public void replace(int containerId, BenihFragment fragment, boolean addToBackStack)
+    {
+        if (addToBackStack)
+        {
+            getFragmentManager().beginTransaction()
+                    .replace(containerId, fragment, fragment.getClass().getSimpleName())
+                    .addToBackStack(null)
+                    .commit();
+        } else
+        {
+            getFragmentManager().beginTransaction()
+                    .replace(containerId, fragment, fragment.getClass().getSimpleName())
+                    .commit();
+        }
+    }
+
+    public void replace(int containerId, BenihFragment fragment, boolean addToBackStack, int transitionStyle)
+    {
+        if (addToBackStack)
+        {
+            getFragmentManager().beginTransaction()
+                    .replace(containerId, fragment, fragment.getClass().getSimpleName())
+                    .setTransitionStyle(transitionStyle)
+                    .commit();
+        } else
+        {
+            getFragmentManager().beginTransaction()
+                    .replace(containerId, fragment, fragment.getClass().getSimpleName())
+                    .setTransitionStyle(transitionStyle)
+                    .commit();
+        }
+    }
+
+    protected ActionBar getSupportActionBar()
+    {
+        return ((BenihActivity) getActivity()).getSupportActionBar();
     }
 }

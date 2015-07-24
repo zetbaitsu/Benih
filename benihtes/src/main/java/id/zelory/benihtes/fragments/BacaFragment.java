@@ -49,5 +49,7 @@ public class BacaFragment extends BenihFragment<Berita>
         client.getBerita(data.getAlamat())
                 .compose(BenihScheduler.applySchedulers(BenihScheduler.Type.IO))
                 .subscribe(berita -> textView.setText(berita.getIsi()), throwable -> log(throwable.getMessage()));
+
+        getSupportActionBar().setTitle(data.getJudul());
     }
 }
