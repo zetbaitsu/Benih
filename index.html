@@ -52,7 +52,7 @@ repositories {
 }
 
 dependencies {
-    compile <span class="pl-s"><span class="pl-pds">'</span>id.zelory.benih:benih:0.0.5<span class="pl-pds">'</span></span>
+    compile <span class="pl-s"><span class="pl-pds">'</span>id.zelory.benih:benih:0.0.7<span class="pl-pds">'</span></span>
 }</pre></div>
 
 <p>Berikut ini adalah salah satu contoh penggunaan Benih untuk melakukan parsing JSON dari web services (API) yang kemudian akan di ubah ke dalam bentuk Object Java dan kemudian ditampilkan dalam RecyclerView. Sangat mudah dan simple, untuk melihat contoh lainnya silahkan lihat pada aplikasi <a href="https://github.com/zetbaitsu/Benih/tree/master/benihtes">benihtes</a></p>
@@ -77,7 +77,7 @@ dependencies {
         <span class="pl-smi">TaniPediaClient</span> client <span class="pl-k">=</span> <span class="pl-smi">ServiceGenerator</span><span class="pl-k">.</span>createService(<span class="pl-smi">TaniPediaClient</span><span class="pl-k">.</span>class, <span class="pl-smi">TaniPediaClient</span><span class="pl-c1"><span class="pl-k">.</span>BASE_URL</span>);
 
         client<span class="pl-k">.</span>getAllBerita()
-                .compose(<span class="pl-smi">BenihScheduler</span><span class="pl-k">.</span>getInstance()<span class="pl-k">.</span>applySchedulers(<span class="pl-smi">BenihScheduler</span><span class="pl-k">.</span><span class="pl-smi">Type</span><span class="pl-c1"><span class="pl-k">.</span>IO</span>))
+                .compose(<span class="pl-smi">BenihScheduler</span><span class="pl-k">.</span>applySchedulers(<span class="pl-smi">BenihScheduler</span><span class="pl-k">.</span><span class="pl-smi">Type</span><span class="pl-c1"><span class="pl-k">.</span>IO</span>))
                 .subscribe(data <span class="pl-k">-</span><span class="pl-k">&gt;</span> {
                     adapter <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">BeritaRecyclerAdapter</span>(<span class="pl-v">this</span>, data);
                     recyclerView<span class="pl-k">.</span>setAdapter(adapter);
