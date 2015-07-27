@@ -24,10 +24,6 @@ import rx.Subscriber;
  */
 public class BenihWorker
 {
-    private BenihWorker()
-    {
-    }
-
     public static Observable<Object> doThis(final Runnable runnable)
     {
         return Observable.create(new Observable.OnSubscribe<Object>()

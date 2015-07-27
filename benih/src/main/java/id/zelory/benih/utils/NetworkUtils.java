@@ -21,8 +21,4 @@ package id.zelory.benih.utils;
  */
 public class NetworkUtils
 {
-    private NetworkUtils()
-    {
-
-    }
 }

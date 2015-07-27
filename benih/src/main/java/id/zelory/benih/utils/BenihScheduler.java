@@ -55,11 +55,6 @@ public class BenihScheduler
         }
     };
 
-    private BenihScheduler()
-    {
-
-    }
-
     @SuppressWarnings("unchecked")
     public static  <T> Observable.Transformer<T, T> applySchedulers(Type type)
     {

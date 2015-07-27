@@ -28,10 +28,6 @@ public class BenihBus
 {
     private static final Subject<Object, Object> bus = new SerializedSubject<>(PublishSubject.create());
 
-    private BenihBus()
-    {
-    }
-
     public static void send(Object o)
     {
         bus.onNext(o);

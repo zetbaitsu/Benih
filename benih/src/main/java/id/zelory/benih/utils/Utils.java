@@ -27,11 +27,6 @@ import java.util.Random;
  */
 public class Utils
 {
-    private Utils()
-    {
-
-    }
-
     public static int randInt(int min, int max)
     {
         Random rand = new Random();
