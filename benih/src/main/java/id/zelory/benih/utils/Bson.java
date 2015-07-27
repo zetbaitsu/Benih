@@ -14,26 +14,28 @@
  *  limitations under the License.
  */
 
-package id.zelory.benih.networks;
+package id.zelory.benih.utils;
 
-import id.zelory.benih.utils.Bson;
-import retrofit.RestAdapter;
-import retrofit.converter.GsonConverter;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.internal.bind.DateTypeAdapter;
+
+import java.util.Date;
 
 /**
- * Created by zetbaitsu on 7/9/15.
+ * Created by zetbaitsu on 7/27/15.
  */
-public class ServiceGenerator
+public class Bson
 {
-    public static <S> S createService(Class<S> serviceClass, String baseUrl)
+    private static final Gson parser = new GsonBuilder()
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .setPrettyPrinting()
+            .registerTypeAdapter(Date.class, new DateTypeAdapter())
+            .create();
+
+    public static Gson getParser()
     {
-        RestAdapter.Builder builder = new RestAdapter.Builder()
-                .setLogLevel(RestAdapter.LogLevel.BASIC)
-                .setConverter(new GsonConverter(Bson.getParser()))
-                .setEndpoint(baseUrl);
-
-        RestAdapter adapter = builder.build();
-
-        return adapter.create(serviceClass);
+        return parser;
     }
 }
