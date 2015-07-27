@@ -23,7 +23,7 @@ ext {
     siteUrl = 'https://github.com/zetbaitsu/Benih'
     gitUrl = 'https://github.com/zetbaitsu/Benih.git'
 
-    libraryVersion = '0.0.7'
+    libraryVersion = '0.0.8'
 
     developerId = 'zetbaitsu'
     developerName = 'Zetra'
@@ -42,7 +42,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
-        versionName "0.0.7"
+        versionName "0.0.8"
     }
     buildTypes {
     }

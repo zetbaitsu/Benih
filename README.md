@@ -30,7 +30,7 @@ repositories {
 }
 
 dependencies {
-    compile 'id.zelory.benih:benih:0.0.7'
+    compile 'id.zelory.benih:benih:0.0.8'
 }
 ```
 
@@ -53,20 +53,22 @@ public class MainActivity extends BenihActivity
     {
         recyclerView = (BenihRecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setUpAsList();
+        adapter = new BeritaRecyclerAdapter(this);
+        recyclerView.setAdapter(adapter);
+
+        adapter.setOnItemClickListener((view, position) -> {
+            Intent intent = new Intent(this, BacaActivity.class);
+            intent.putParcelableArrayListExtra("data", (ArrayList<Berita>) adapter.getData());
+            intent.putExtra("pos", position);
+            startActivity(intent);
+        });
 
         TaniPediaClient client = ServiceGenerator.createService(TaniPediaClient.class, TaniPediaClient.BASE_URL);
 
         client.getAllBerita()
                 .compose(BenihScheduler.applySchedulers(BenihScheduler.Type.IO))
                 .subscribe(data -> {
-                    adapter = new BeritaRecyclerAdapter(this, data);
-                    recyclerView.setAdapter(adapter);
-                    adapter.setOnItemClickListener((view, position) -> {
-                        Intent intent = new Intent(this, BacaActivity.class);
-                        intent.putParcelableArrayListExtra("data", (ArrayList<Berita>) adapter.getData());
-                        intent.putExtra("pos", position);
-                        startActivity(intent);
-                    });
+                    adapter.add(data);
                 }, throwable -> log(throwable.getMessage()));
     }
 }
