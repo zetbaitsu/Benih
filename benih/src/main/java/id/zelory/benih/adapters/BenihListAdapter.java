@@ -18,6 +18,7 @@ package id.zelory.benih.adapters;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -25,10 +26,14 @@ import android.widget.BaseAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import id.zelory.benih.adapters.viewholder.BenihListViewHolder;
+import id.zelory.benih.utils.BenihWorker;
+import rx.functions.Action1;
+
 /**
  * Created by zetbaitsu on 7/10/15.
  */
-public abstract class BenihListAdapter<Data> extends BaseAdapter
+public abstract class BenihListAdapter<Data, Holder extends BenihListViewHolder> extends BaseAdapter
 {
     protected Context context;
     protected List<Data> data;
@@ -70,7 +75,27 @@ public abstract class BenihListAdapter<Data> extends BaseAdapter
     }
 
     @Override
-    public abstract View getView(int position, View convertView, ViewGroup parent);
+    public View getView(int position, View itemView, ViewGroup parent)
+    {
+        Holder holder;
+        if (itemView == null)
+        {
+            itemView = LayoutInflater.from(context).inflate(getItemView(), parent, false);
+            holder = onCreateViewHolder(itemView);
+            itemView.setTag(holder);
+        } else
+        {
+            holder = (Holder) itemView.getTag();
+        }
+
+        holder.bind(data.get(position));
+
+        return itemView;
+    }
+
+    protected abstract int getItemView();
+
+    public abstract Holder onCreateViewHolder(View itemView);
 
     public List<Data> getData()
     {
@@ -89,12 +114,27 @@ public abstract class BenihListAdapter<Data> extends BaseAdapter
         notifyDataSetChanged();
     }
 
-    public void add(List<Data> items)
+    public void add(final List<Data> items)
     {
-        for (Data item : items)
+        final int size = items.size();
+        BenihWorker.doThis(new Runnable()
         {
-            add(item);
-        }
+            @Override
+            public void run()
+            {
+                for (int i = 0; i < size; i++)
+                {
+                    data.add(items.get(i));
+                }
+            }
+        }).subscribe(new Action1<Object>()
+        {
+            @Override
+            public void call(Object o)
+            {
+                notifyDataSetChanged();
+            }
+        });
     }
 
     public void remove(int position)

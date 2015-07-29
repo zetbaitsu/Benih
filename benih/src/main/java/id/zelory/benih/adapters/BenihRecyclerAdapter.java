@@ -19,11 +19,16 @@ package id.zelory.benih.adapters;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import id.zelory.benih.adapters.viewholder.BenihViewHolder;
+import id.zelory.benih.utils.BenihWorker;
+import rx.functions.Action1;
 
 /**
  * Created by zetbaitsu on 7/10/15.
@@ -48,11 +53,21 @@ public abstract class BenihRecyclerAdapter<Data, Holder extends BenihViewHolder>
         this.data = data;
     }
 
+    protected View getView(ViewGroup parent, int viewType)
+    {
+        return LayoutInflater.from(context).inflate(getItemView(viewType), parent, false);
+    }
+
+    protected abstract int getItemView(int viewType);
+
     @Override
     public abstract Holder onCreateViewHolder(ViewGroup parent, int viewType);
 
     @Override
-    public abstract void onBindViewHolder(Holder holder, int position);
+    public void onBindViewHolder(Holder holder, int position)
+    {
+        holder.bind(data.get(position));
+    }
 
     @Override
     public int getItemCount()
@@ -109,12 +124,27 @@ public abstract class BenihRecyclerAdapter<Data, Holder extends BenihViewHolder>
         notifyItemInserted(position);
     }
 
-    public void add(List<Data> items)
+    public void add(final List<Data> items)
     {
-        for (Data item : items)
+        final int size = items.size();
+        BenihWorker.doThis(new Runnable()
         {
-            add(item);
-        }
+            @Override
+            public void run()
+            {
+                for (int i = 0; i < size; i++)
+                {
+                    data.add(items.get(i));
+                }
+            }
+        }).subscribe(new Action1<Object>()
+        {
+            @Override
+            public void call(Object o)
+            {
+                notifyDataSetChanged();
+            }
+        });
     }
 
     public void remove(int position)

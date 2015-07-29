@@ -52,7 +52,7 @@ public class MainActivity extends BenihActivity
                 .compose(BenihScheduler.applySchedulers(BenihScheduler.Type.IO))
                 .subscribe(adapter::add, throwable -> log(throwable.getMessage()));
 
-        BenihWorker.doThis(MainActivity.this::doSomeThing)
+        BenihWorker.doThis(this::doSomeThing)
                 .subscribe(o -> log(o.toString()), throwable -> log(throwable.getMessage()));
 
         for (int i = 0; i < 10; i++)

@@ -17,23 +17,17 @@
 package id.zelory.benihtes.adapters;
 
 import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
-import java.util.List;
 
 import id.zelory.benih.adapters.BenihRecyclerAdapter;
-import id.zelory.benih.adapters.BenihViewHolder;
 import id.zelory.benihtes.R;
+import id.zelory.benihtes.adapters.viewholder.BeritaHolder;
 import id.zelory.benihtes.models.Berita;
 
 /**
  * Created by zetbaitsu on 7/10/15.
  */
-public class BeritaRecyclerAdapter extends
-        BenihRecyclerAdapter<Berita, BeritaRecyclerAdapter.BeritaHolder>
+public class BeritaRecyclerAdapter extends BenihRecyclerAdapter<Berita, BeritaHolder>
 {
     public BeritaRecyclerAdapter(Context context)
     {
@@ -41,26 +35,14 @@ public class BeritaRecyclerAdapter extends
     }
 
     @Override
-    public BeritaHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    protected int getItemView(int viewType)
     {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_berita, parent, false);
-        return new BeritaHolder(view, itemClickListener, longItemClickListener);
+        return R.layout.item_berita;
     }
 
     @Override
-    public void onBindViewHolder(BeritaHolder holder, int position)
+    public BeritaHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
-        holder.judul.setText(data.get(position).getJudul());
-    }
-
-    public class BeritaHolder extends BenihViewHolder
-    {
-        TextView judul;
-
-        public BeritaHolder(View itemView, OnItemClickListener itemClickListener, OnLongItemClickListener longItemClickListener)
-        {
-            super(itemView, itemClickListener, longItemClickListener);
-            judul = (TextView) itemView.findViewById(R.id.text);
-        }
+        return new BeritaHolder(getView(parent, viewType), itemClickListener, longItemClickListener);
     }
 }

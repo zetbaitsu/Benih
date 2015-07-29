@@ -17,22 +17,19 @@
 package id.zelory.benihtes.adapters;
 
 import android.content.Context;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.List;
 
 import id.zelory.benih.adapters.BenihListAdapter;
 import id.zelory.benihtes.R;
+import id.zelory.benihtes.adapters.viewholder.BeritaListHolder;
 import id.zelory.benihtes.models.Berita;
 
 /**
  * Created by zetbaitsu on 7/10/15.
  */
-public class BeritaListAdapter extends BenihListAdapter<Berita>
+public class BeritaListAdapter extends BenihListAdapter<Berita, BeritaListHolder>
 {
     public BeritaListAdapter(Context context, List<Berita> data)
     {
@@ -40,29 +37,14 @@ public class BeritaListAdapter extends BenihListAdapter<Berita>
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent)
+    protected int getItemView()
     {
-        ViewHolder holder;
-        if (convertView == null)
-        {
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_berita, parent, false);
-
-            holder = new ViewHolder();
-            holder.judul = (TextView) convertView.findViewById(R.id.text);
-
-            convertView.setTag(holder);
-        } else
-        {
-            holder = (ViewHolder) convertView.getTag();
-        }
-
-        holder.judul.setText(data.get(position).getJudul());
-
-        return convertView;
+        return R.layout.item_berita;
     }
 
-    private class ViewHolder
+    @Override
+    public BeritaListHolder onCreateViewHolder(View itemView)
     {
-        TextView judul;
+        return new BeritaListHolder(itemView);
     }
 }
