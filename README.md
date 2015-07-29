@@ -30,7 +30,7 @@ repositories {
 }
 
 dependencies {
-    compile 'id.zelory.benih:benih:0.0.8'
+    compile 'id.zelory.benih:benih:0.0.9'
 }
 ```
 

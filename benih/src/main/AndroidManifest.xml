@@ -2,9 +2,4 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="id.zelory.benih" >
 
-    <application
-        android:allowBackup="true"
-        android:label="@string/app_name" >
-    </application>
-
 </manifest>
