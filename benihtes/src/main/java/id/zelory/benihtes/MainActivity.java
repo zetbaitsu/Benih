@@ -19,7 +19,6 @@ import id.zelory.benih.view.BenihRecyclerView;
 import id.zelory.benihtes.adapter.BeritaRecyclerAdapter;
 import id.zelory.benihtes.controller.BeritaController;
 import id.zelory.benihtes.model.Berita;
-import rx.Subscription;
 
 public class MainActivity extends BenihActivity implements BeritaController.Presenter
 {
