@@ -30,7 +30,7 @@ repositories {
 }
 
 dependencies {
-    compile 'id.zelory.benih:benih:0.0.9'
+    compile 'id.zelory.benih:benih:0.1.0'
 }
 ```
 
@@ -66,7 +66,7 @@ public class MainActivity extends BenihActivity
         TaniPediaClient client = ServiceGenerator.createService(TaniPediaClient.class, TaniPediaClient.BASE_URL);
 
         client.getAllBerita()
-                .compose(BenihScheduler.applySchedulers(BenihScheduler.Type.IO))
+                .compose(BenihScheduler.pluck().applySchedulers(BenihScheduler.Type.IO))
                 .subscribe(data -> {
                     adapter.add(data);
                 }, throwable -> log(throwable.getMessage()));

@@ -14,22 +14,22 @@
  *  limitations under the License.
  */
 
-package id.zelory.benih;
+package id.zelory.benih.adapter.viewholder;
 
-import android.app.Application;
 import android.util.Log;
+import android.view.View;
 
 /**
- * Created by zetbaitsu on 7/13/15.
+ * Created by zetbaitsu on 7/29/15.
  */
-public class BenihApplication extends Application
+public abstract class BenihListViewHolder<Data>
 {
-    @Override
-    public void onCreate()
+    public BenihListViewHolder(View itemView)
     {
-        super.onCreate();
-        log("Apps starting");
+
     }
+
+    public abstract void bind(Data data);
 
     protected void log(String message)
     {

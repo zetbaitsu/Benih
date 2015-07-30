@@ -2,23 +2,28 @@ package id.zelory.benihtes;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.support.design.widget.Snackbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import id.zelory.benih.BenihActivity;
-import id.zelory.benih.networks.ServiceGenerator;
-import id.zelory.benih.utils.BenihBus;
-import id.zelory.benih.utils.BenihScheduler;
-import id.zelory.benih.utils.BenihWorker;
-import id.zelory.benih.views.BenihRecyclerView;
-import id.zelory.benihtes.adapters.BeritaRecyclerAdapter;
-import id.zelory.benihtes.models.Berita;
-import id.zelory.benihtes.networks.clients.TaniPediaClient;
+import id.zelory.benih.controller.Controller;
+import id.zelory.benih.util.BenihBus;
+import id.zelory.benih.util.BenihWorker;
+import id.zelory.benih.view.BenihRecyclerView;
+import id.zelory.benihtes.adapter.BeritaRecyclerAdapter;
+import id.zelory.benihtes.controller.BeritaController;
+import id.zelory.benihtes.model.Berita;
+import rx.Subscription;
 
-public class MainActivity extends BenihActivity
+public class MainActivity extends BenihActivity implements BeritaController.Presenter
 {
+    private BeritaController beritaController;
     private BenihRecyclerView recyclerView;
     private BeritaRecyclerAdapter adapter;
 
@@ -31,9 +36,22 @@ public class MainActivity extends BenihActivity
     @Override
     protected void onViewReady(Bundle savedInstanceState)
     {
-        BenihBus.receive()
+        subscription = BenihBus.pluck()
+                .receive()
                 .subscribe(o -> log(o.toString()), throwable -> log(throwable.getMessage()));
+        subscriptionCollector.add(subscription);
 
+        setUpAdapter();
+        setUpRecyclerView();
+        setUpController(savedInstanceState);
+
+        beritaController.doSomeThing();
+
+        doSomeDummyThread();
+    }
+
+    private void setUpAdapter()
+    {
         adapter = new BeritaRecyclerAdapter(this);
         adapter.setOnItemClickListener((view, position) -> {
             Intent intent = new Intent(this, BacaActivity.class);
@@ -42,52 +60,57 @@ public class MainActivity extends BenihActivity
             startActivity(intent);
         });
         adapter.setOnLongItemClickListener((view, position) -> adapter.remove(position));
+    }
 
+    private void setUpRecyclerView()
+    {
         recyclerView = (BenihRecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setUpAsList();
         recyclerView.setAdapter(adapter);
+    }
 
-        TaniPediaClient client = ServiceGenerator.createService(TaniPediaClient.class, TaniPediaClient.BASE_URL);
-        client.getAllBerita()
-                .compose(BenihScheduler.applySchedulers(BenihScheduler.Type.IO))
-                .subscribe(adapter::add, throwable -> log(throwable.getMessage()));
-
-        BenihWorker.doThis(this::doSomeThing)
-                .subscribe(o -> log(o.toString()), throwable -> log(throwable.getMessage()));
-
-        for (int i = 0; i < 10; i++)
+    private void setUpController(Bundle bundle)
+    {
+        if (beritaController == null)
         {
-            final int thread = i;
-            BenihWorker.doThis(() -> {
-                for (int j = 0; j < 10000; j++)
-                {
-                    for (int k = 0; k < j; k++)
-                    {
-                        int a = j;
-                        int b = k;
-                        int c = a * k + b * j;
-                        c = c / (j - k);
-                    }
-                }
-            }).subscribe(o -> log("Worker " + thread + " is done."), throwable -> log(throwable.getMessage()));
+            beritaController = new BeritaController(this);
+        }
+
+        if (bundle != null)
+        {
+            beritaController.loadState(bundle);
+        } else
+        {
+            beritaController.loadListBerita();
         }
     }
 
-    void doSomeThing()
+    private void doSomeDummyThread()
     {
-        for (int i = 0; i < 1000000000; i++)
+        for (int i = 0; i < 10; i++)
         {
-            int a = i;
-            int b = a + 1;
-            int c = b * 2;
-            a = a * c / b;
+            final int thread = i;
+            subscription = BenihWorker.pluck()
+                    .doThis(() -> {
+                        for (int j = 0; j < 10000; j++)
+                        {
+                            for (int k = 0; k < j; k++)
+                            {
+                                int a = j;
+                                int b = k;
+                                int c = a * k + b * j;
+                                c = c / (j - k);
+                            }
+                        }
+                    }).subscribe(o -> log("Worker " + thread + " is done."), throwable -> log(throwable.getMessage()));
+            subscriptionCollector.add(subscription);
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        BenihBus.send("onCreateOptionMenu()");
+        BenihBus.pluck().send("onCreateOptionMenu()");
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -95,7 +118,7 @@ public class MainActivity extends BenihActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        BenihBus.send("onOptionsMenuSelected");
+        BenihBus.pluck().send("onOptionsMenuSelected");
         int id = item.getItemId();
         switch (id)
         {
@@ -106,5 +129,43 @@ public class MainActivity extends BenihActivity
         }
         return super.onOptionsItemSelected(item);
 
+    }
+
+    @Override
+    public void showListBerita(List<Berita> listBerita)
+    {
+        adapter.add(listBerita);
+    }
+
+    @Override
+    public void showBerita(Berita berita)
+    {
+
+    }
+
+    @Override
+    public void showSomeThing()
+    {
+        adapter.remove(3);
+        Toast.makeText(this, "WOWWOWOWOWO", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showError(Controller.Presenter presenter, Throwable throwable)
+    {
+        if (presenter instanceof BeritaController.Presenter)
+        {
+            Snackbar.make(recyclerView, "Something wrong!", Snackbar.LENGTH_LONG).show();
+        } else
+        {
+            log("another presenter");
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState)
+    {
+        beritaController.saveState(outState);
+        super.onSaveInstanceState(outState, outPersistentState);
     }
 }

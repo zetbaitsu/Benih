@@ -14,31 +14,31 @@
  *  limitations under the License.
  */
 
-package id.zelory.benih;
+package id.zelory.benihtes.adapter.viewholder;
 
-import android.app.Application;
-import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+
+import id.zelory.benih.adapter.viewholder.BenihListViewHolder;
+import id.zelory.benihtes.R;
+import id.zelory.benihtes.model.Berita;
 
 /**
- * Created by zetbaitsu on 7/13/15.
+ * Created by zetbaitsu on 7/29/15.
  */
-public class BenihApplication extends Application
+public class BeritaListHolder extends BenihListViewHolder<Berita>
 {
-    @Override
-    public void onCreate()
+    private TextView judul;
+
+    public BeritaListHolder(View itemView)
     {
-        super.onCreate();
-        log("Apps starting");
+        super(itemView);
+        judul = (TextView) itemView.findViewById(R.id.text);
     }
 
-    protected void log(String message)
+    @Override
+    public void bind(Berita berita)
     {
-        try
-        {
-            Log.d(getClass().getSimpleName(), message);
-        } catch (Exception e)
-        {
-            Log.d(getClass().getSimpleName(), "Null message.");
-        }
+        judul.setText(berita.getJudul());
     }
 }

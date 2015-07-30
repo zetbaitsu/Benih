@@ -14,31 +14,26 @@
  *  limitations under the License.
  */
 
-package id.zelory.benih;
+package id.zelory.benih.network;
 
-import android.app.Application;
-import android.util.Log;
+import id.zelory.benih.util.Bson;
+import retrofit.RestAdapter;
+import retrofit.converter.GsonConverter;
 
 /**
- * Created by zetbaitsu on 7/13/15.
+ * Created by zetbaitsu on 7/9/15.
  */
-public class BenihApplication extends Application
+public class ServiceGenerator
 {
-    @Override
-    public void onCreate()
+    public static <S> S createService(Class<S> serviceClass, String baseUrl)
     {
-        super.onCreate();
-        log("Apps starting");
-    }
+        RestAdapter.Builder builder = new RestAdapter.Builder()
+                .setLogLevel(RestAdapter.LogLevel.BASIC)
+                .setConverter(new GsonConverter(Bson.pluck().getParser()))
+                .setEndpoint(baseUrl);
 
-    protected void log(String message)
-    {
-        try
-        {
-            Log.d(getClass().getSimpleName(), message);
-        } catch (Exception e)
-        {
-            Log.d(getClass().getSimpleName(), "Null message.");
-        }
+        RestAdapter adapter = builder.build();
+
+        return adapter.create(serviceClass);
     }
 }

@@ -14,31 +14,21 @@
  *  limitations under the License.
  */
 
-package id.zelory.benih;
+package id.zelory.benihtes;
 
-import android.app.Application;
-import android.util.Log;
+import com.squareup.leakcanary.LeakCanary;
+
+import id.zelory.benih.BenihApplication;
 
 /**
- * Created by zetbaitsu on 7/13/15.
+ * Created by zetbaitsu on 7/30/15.
  */
-public class BenihApplication extends Application
+public class TesApplication extends BenihApplication
 {
     @Override
     public void onCreate()
     {
         super.onCreate();
-        log("Apps starting");
-    }
-
-    protected void log(String message)
-    {
-        try
-        {
-            Log.d(getClass().getSimpleName(), message);
-        } catch (Exception e)
-        {
-            Log.d(getClass().getSimpleName(), "Null message.");
-        }
+        LeakCanary.install(this);
     }
 }

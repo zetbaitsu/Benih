@@ -14,31 +14,41 @@
  *  limitations under the License.
  */
 
-package id.zelory.benih;
+package id.zelory.benih.controller;
 
-import android.app.Application;
+import android.os.Bundle;
 import android.util.Log;
 
 /**
- * Created by zetbaitsu on 7/13/15.
+ * Created by zetbaitsu on 7/29/15.
  */
-public class BenihApplication extends Application
+public abstract class Controller<P extends Controller.Presenter>
 {
-    @Override
-    public void onCreate()
+    protected P presenter;
+
+    public Controller(P presenter)
     {
-        super.onCreate();
-        log("Apps starting");
+        this.presenter = presenter;
     }
+
+    public abstract void saveState(Bundle bundle);
+
+    public abstract void loadState(Bundle bundle);
 
     protected void log(String message)
     {
         try
         {
-            Log.d(getClass().getSimpleName(), message);
-        } catch (Exception e)
+            Log.d(this.getClass().getSimpleName(), message);
+        } catch (Exception var3)
         {
-            Log.d(getClass().getSimpleName(), "Null message.");
+            Log.d(this.getClass().getSimpleName(), "Null message.");
         }
+
+    }
+
+    public interface Presenter
+    {
+        void showError(Presenter presenter, Throwable throwable);
     }
 }

@@ -24,8 +24,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import id.zelory.benih.BenihActivity;
-import id.zelory.benihtes.adapters.MyPagerAdapter;
-import id.zelory.benihtes.fragments.MyFragment;
+import id.zelory.benihtes.adapter.MyPagerAdapter;
+import id.zelory.benihtes.fragment.MyFragment;
 
 /**
  * Created by zetbaitsu on 7/12/15.

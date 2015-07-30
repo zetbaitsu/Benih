@@ -14,31 +14,11 @@
  *  limitations under the License.
  */
 
-package id.zelory.benih;
-
-import android.app.Application;
-import android.util.Log;
+package id.zelory.benih.util;
 
 /**
  * Created by zetbaitsu on 7/13/15.
  */
-public class BenihApplication extends Application
+public class NetworkUtils
 {
-    @Override
-    public void onCreate()
-    {
-        super.onCreate();
-        log("Apps starting");
-    }
-
-    protected void log(String message)
-    {
-        try
-        {
-            Log.d(getClass().getSimpleName(), message);
-        } catch (Exception e)
-        {
-            Log.d(getClass().getSimpleName(), "Null message.");
-        }
-    }
 }

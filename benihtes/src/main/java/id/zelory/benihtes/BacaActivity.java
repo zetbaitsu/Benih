@@ -23,9 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import id.zelory.benih.BenihActivity;
-import id.zelory.benihtes.adapters.BacaPagerAdapter;
-import id.zelory.benihtes.fragments.BacaFragment;
-import id.zelory.benihtes.models.Berita;
+import id.zelory.benih.util.BenihBus;
+import id.zelory.benihtes.adapter.BacaPagerAdapter;
+import id.zelory.benihtes.fragment.BacaFragment;
+import id.zelory.benihtes.model.Berita;
 
 /**
  * Created by zetbaitsu on 7/12/15.
@@ -41,6 +42,11 @@ public class BacaActivity extends BenihActivity
     @Override
     protected void onViewReady(Bundle savedInstanceState)
     {
+        subscription = BenihBus.pluck()
+                .receive()
+                .subscribe(o -> log("from BacaActivity : " + o.toString()));
+        subscriptionCollector.add(subscription);
+
         int pos = getIntent().getIntExtra("pos", 0);
         ArrayList<Berita> data = getIntent().getParcelableArrayListExtra("data");
         List<BacaFragment> fragments = new ArrayList<>();

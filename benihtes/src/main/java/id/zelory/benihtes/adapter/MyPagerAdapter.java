@@ -14,31 +14,29 @@
  *  limitations under the License.
  */
 
-package id.zelory.benih;
+package id.zelory.benihtes.adapter;
 
-import android.app.Application;
-import android.util.Log;
+import android.support.v4.app.FragmentManager;
+
+import java.util.List;
+
+import id.zelory.benih.adapter.BenihPagerAdapter;
+import id.zelory.benihtes.fragment.MyFragment;
 
 /**
- * Created by zetbaitsu on 7/13/15.
+ * Created by zetbaitsu on 7/12/15.
  */
-public class BenihApplication extends Application
+public class MyPagerAdapter extends BenihPagerAdapter<MyFragment>
 {
-    @Override
-    public void onCreate()
+    public MyPagerAdapter(FragmentManager fm, List<MyFragment> myFragments, List<String> titles)
     {
-        super.onCreate();
-        log("Apps starting");
+        super(fm, myFragments, titles);
     }
 
-    protected void log(String message)
+    @Override
+    public MyFragment getItem(int position)
     {
-        try
-        {
-            Log.d(getClass().getSimpleName(), message);
-        } catch (Exception e)
-        {
-            Log.d(getClass().getSimpleName(), "Null message.");
-        }
+        fragments.get(position).setData("This is fragment " + (position + 1));
+        return fragments.get(position);
     }
 }

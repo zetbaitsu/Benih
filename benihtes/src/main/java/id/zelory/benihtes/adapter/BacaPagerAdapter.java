@@ -14,31 +14,28 @@
  *  limitations under the License.
  */
 
-package id.zelory.benih;
+package id.zelory.benihtes.adapter;
 
-import android.app.Application;
-import android.util.Log;
+import android.support.v4.app.FragmentManager;
+
+import java.util.List;
+
+import id.zelory.benih.adapter.BenihPagerAdapter;
+import id.zelory.benihtes.fragment.BacaFragment;
 
 /**
- * Created by zetbaitsu on 7/13/15.
+ * Created by zetbaitsu on 7/12/15.
  */
-public class BenihApplication extends Application
+public class BacaPagerAdapter extends BenihPagerAdapter<BacaFragment>
 {
-    @Override
-    public void onCreate()
+    public BacaPagerAdapter(FragmentManager fm, List<BacaFragment> bacaFragments)
     {
-        super.onCreate();
-        log("Apps starting");
+        super(fm, bacaFragments);
     }
 
-    protected void log(String message)
+    @Override
+    public BacaFragment getItem(int position)
     {
-        try
-        {
-            Log.d(getClass().getSimpleName(), message);
-        } catch (Exception e)
-        {
-            Log.d(getClass().getSimpleName(), "Null message.");
-        }
+        return fragments.get(position);
     }
 }
