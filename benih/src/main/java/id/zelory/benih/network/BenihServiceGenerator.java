@@ -23,7 +23,7 @@ import retrofit.converter.GsonConverter;
 /**
  * Created by zetbaitsu on 7/9/15.
  */
-public class ServiceGenerator
+public class BenihServiceGenerator
 {
     public static <S> S createService(Class<S> serviceClass, String baseUrl)
     {

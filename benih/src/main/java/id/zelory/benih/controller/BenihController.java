@@ -22,11 +22,11 @@ import android.util.Log;
 /**
  * Created by zetbaitsu on 7/29/15.
  */
-public abstract class Controller<P extends Controller.Presenter>
+public abstract class BenihController<P extends BenihController.Presenter>
 {
     protected P presenter;
 
-    public Controller(P presenter)
+    public BenihController(P presenter)
     {
         this.presenter = presenter;
     }

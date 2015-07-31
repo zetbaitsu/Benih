@@ -23,7 +23,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import id.zelory.benih.controller.Controller;
+import id.zelory.benih.controller.BenihController;
 import id.zelory.benih.fragment.BenihFragment;
 import id.zelory.benih.util.BenihBus;
 import id.zelory.benihtes.R;
@@ -102,7 +102,7 @@ public class BacaFragment extends BenihFragment<Berita> implements BeritaControl
     }
 
     @Override
-    public void showError(Controller.Presenter presenter, Throwable throwable)
+    public void showError(BenihController.Presenter presenter, Throwable throwable)
     {
 
     }

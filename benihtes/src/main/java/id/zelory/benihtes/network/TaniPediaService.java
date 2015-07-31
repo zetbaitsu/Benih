@@ -18,7 +18,7 @@ package id.zelory.benihtes.network;
 
 import java.util.List;
 
-import id.zelory.benih.network.ServiceGenerator;
+import id.zelory.benih.network.BenihServiceGenerator;
 import id.zelory.benihtes.model.Berita;
 import id.zelory.benihtes.model.Cuaca;
 import retrofit.http.GET;
@@ -35,7 +35,7 @@ public enum TaniPediaService
 
     TaniPediaService()
     {
-        api = ServiceGenerator.createService(Api.class, Api.BASE_URL);
+        api = BenihServiceGenerator.createService(Api.class, Api.BASE_URL);
     }
 
     public static TaniPediaService pluck()

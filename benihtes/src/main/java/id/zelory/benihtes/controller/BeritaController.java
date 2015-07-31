@@ -21,7 +21,7 @@ import android.os.Bundle;
 import java.util.ArrayList;
 import java.util.List;
 
-import id.zelory.benih.controller.Controller;
+import id.zelory.benih.controller.BenihController;
 import id.zelory.benih.util.BenihScheduler;
 import id.zelory.benih.util.BenihWorker;
 import id.zelory.benihtes.model.Berita;
@@ -30,7 +30,7 @@ import id.zelory.benihtes.network.TaniPediaService;
 /**
  * Created by zetbaitsu on 7/29/15.
  */
-public class BeritaController extends Controller<BeritaController.Presenter>
+public class BeritaController extends BenihController<BeritaController.Presenter>
 {
     private List<Berita> listBerita;
     private Berita berita;
@@ -38,6 +38,7 @@ public class BeritaController extends Controller<BeritaController.Presenter>
     public BeritaController(Presenter presenter)
     {
         super(presenter);
+        log("BeritaController created");
     }
 
     public void loadListBerita()
@@ -120,7 +121,7 @@ public class BeritaController extends Controller<BeritaController.Presenter>
         }
     }
 
-    public interface Presenter extends Controller.Presenter
+    public interface Presenter extends BenihController.Presenter
     {
         void showListBerita(List<Berita> listBerita);
 

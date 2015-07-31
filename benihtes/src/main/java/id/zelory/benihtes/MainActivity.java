@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import id.zelory.benih.BenihActivity;
-import id.zelory.benih.controller.Controller;
+import id.zelory.benih.controller.BenihController;
 import id.zelory.benih.util.BenihBus;
 import id.zelory.benih.util.BenihWorker;
 import id.zelory.benih.view.BenihRecyclerView;
@@ -150,7 +150,7 @@ public class MainActivity extends BenihActivity implements BeritaController.Pres
     }
 
     @Override
-    public void showError(Controller.Presenter presenter, Throwable throwable)
+    public void showError(BenihController.Presenter presenter, Throwable throwable)
     {
         if (presenter instanceof BeritaController.Presenter)
         {
