@@ -26,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.ButterKnife;
 import id.zelory.benih.BenihActivity;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
@@ -35,7 +36,6 @@ import rx.subscriptions.CompositeSubscription;
  */
 public abstract class BenihFragment<Data extends Parcelable> extends Fragment
 {
-    private View view;
     protected Data data;
     protected Subscription subscription;
     protected CompositeSubscription subscriptionCollector;
@@ -56,7 +56,8 @@ public abstract class BenihFragment<Data extends Parcelable> extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        view = LayoutInflater.from(getActivity()).inflate(getFragmentView(), container, false);
+        View view = LayoutInflater.from(getActivity()).inflate(getFragmentView(), container, false);
+        ButterKnife.bind(this, view);
         return view;
     }
 
@@ -68,7 +69,7 @@ public abstract class BenihFragment<Data extends Parcelable> extends Fragment
         {
             data = savedInstanceState.getParcelable("data");
         }
-        onViewReady(savedInstanceState, view);
+        onViewReady(savedInstanceState);
     }
 
     public void setData(Data data)
@@ -83,7 +84,7 @@ public abstract class BenihFragment<Data extends Parcelable> extends Fragment
 
     protected abstract int getFragmentView();
 
-    protected abstract void onViewReady(@Nullable Bundle savedInstanceState, View view);
+    protected abstract void onViewReady(@Nullable Bundle savedInstanceState);
 
     @Override
     public void onSaveInstanceState(Bundle outState)
@@ -106,7 +107,6 @@ public abstract class BenihFragment<Data extends Parcelable> extends Fragment
             subscriptionCollector.unsubscribe();
             subscriptionCollector = null;
         }
-        view = null;
         data = null;
         super.onDestroy();
     }

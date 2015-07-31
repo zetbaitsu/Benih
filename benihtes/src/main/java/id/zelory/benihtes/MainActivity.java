@@ -11,6 +11,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import id.zelory.benih.BenihActivity;
 import id.zelory.benih.controller.BenihController;
 import id.zelory.benih.util.BenihBus;
@@ -23,7 +24,7 @@ import id.zelory.benihtes.model.Berita;
 public class MainActivity extends BenihActivity implements BeritaController.Presenter
 {
     private BeritaController beritaController;
-    private BenihRecyclerView recyclerView;
+    @Bind(R.id.recycler_view) BenihRecyclerView recyclerView;
     private BeritaRecyclerAdapter adapter;
 
     @Override
@@ -63,7 +64,6 @@ public class MainActivity extends BenihActivity implements BeritaController.Pres
 
     private void setUpRecyclerView()
     {
-        recyclerView = (BenihRecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setUpAsList();
         recyclerView.setAdapter(adapter);
     }

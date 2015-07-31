@@ -21,6 +21,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
 
+import butterknife.Bind;
 import id.zelory.benih.fragment.BenihFragment;
 import id.zelory.benihtes.R;
 
@@ -30,6 +31,7 @@ import id.zelory.benihtes.R;
 public class MyFragment extends BenihFragment
 {
     private String data;
+    @Bind(R.id.text) TextView textView;
 
     public MyFragment()
     {
@@ -48,9 +50,8 @@ public class MyFragment extends BenihFragment
     }
 
     @Override
-    protected void onViewReady(@Nullable Bundle savedInstanceState, View view)
+    protected void onViewReady(@Nullable Bundle savedInstanceState)
     {
-        TextView textView = (TextView) view.findViewById(R.id.text);
         textView.setText(data);
     }
 

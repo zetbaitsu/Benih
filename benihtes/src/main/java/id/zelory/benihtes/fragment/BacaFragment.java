@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.Bind;
 import id.zelory.benih.controller.BenihController;
 import id.zelory.benih.fragment.BenihFragment;
 import id.zelory.benih.util.BenihBus;
@@ -36,7 +37,7 @@ import id.zelory.benihtes.model.Berita;
 public class BacaFragment extends BenihFragment<Berita> implements BeritaController.Presenter
 {
     private BeritaController beritaController;
-    private TextView textView;
+    @Bind(R.id.text) TextView textView;
 
     @Override
     protected int getFragmentView()
@@ -45,14 +46,13 @@ public class BacaFragment extends BenihFragment<Berita> implements BeritaControl
     }
 
     @Override
-    protected void onViewReady(@Nullable Bundle savedInstanceState, View view)
+    protected void onViewReady(@Nullable Bundle savedInstanceState)
     {
         subscription = BenihBus.pluck()
                 .receive()
                 .subscribe(o -> log("from BacaFragment : " + o.toString()));
         subscriptionCollector.add(subscription);
 
-        textView = (TextView) view.findViewById(R.id.text);
         setUpController(savedInstanceState);
     }
 

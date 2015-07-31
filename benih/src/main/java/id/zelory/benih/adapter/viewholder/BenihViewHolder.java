@@ -20,6 +20,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
+import butterknife.ButterKnife;
 import id.zelory.benih.adapter.BenihRecyclerAdapter;
 
 /**
@@ -35,6 +36,7 @@ public abstract class BenihViewHolder<Data> extends RecyclerView.ViewHolder impl
     public BenihViewHolder(View itemView, BenihRecyclerAdapter.OnItemClickListener itemClickListener, BenihRecyclerAdapter.OnLongItemClickListener longItemClickListener)
     {
         super(itemView);
+        ButterKnife.bind(this, itemView);
         this.itemClickListener = itemClickListener;
         this.longItemClickListener = longItemClickListener;
         itemView.setOnClickListener(this);

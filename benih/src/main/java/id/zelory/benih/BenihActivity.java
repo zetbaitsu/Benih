@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import butterknife.ButterKnife;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
@@ -17,6 +18,7 @@ public abstract class BenihActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(getActivityView());
+        ButterKnife.bind(this);
         subscriptionCollector = new CompositeSubscription();
         onViewReady(savedInstanceState);
     }

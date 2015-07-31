@@ -19,6 +19,7 @@ package id.zelory.benihtes.adapter.viewholder;
 import android.view.View;
 import android.widget.TextView;
 
+import butterknife.Bind;
 import id.zelory.benih.adapter.BenihRecyclerAdapter;
 import id.zelory.benih.adapter.viewholder.BenihViewHolder;
 import id.zelory.benihtes.R;
@@ -29,12 +30,11 @@ import id.zelory.benihtes.model.Berita;
  */
 public class BeritaHolder extends BenihViewHolder<Berita>
 {
-    private TextView judul;
+    @Bind(R.id.text) TextView judul;
 
     public BeritaHolder(View itemView, BenihRecyclerAdapter.OnItemClickListener itemClickListener, BenihRecyclerAdapter.OnLongItemClickListener longItemClickListener)
     {
         super(itemView, itemClickListener, longItemClickListener);
-        judul = (TextView) itemView.findViewById(R.id.text);
     }
 
     @Override
