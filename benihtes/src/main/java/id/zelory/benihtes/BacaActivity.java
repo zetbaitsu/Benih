@@ -22,6 +22,7 @@ import android.support.v4.view.ViewPager;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import id.zelory.benih.BenihActivity;
 import id.zelory.benih.util.BenihBus;
 import id.zelory.benihtes.adapter.BacaPagerAdapter;
@@ -33,6 +34,7 @@ import id.zelory.benihtes.model.Berita;
  */
 public class BacaActivity extends BenihActivity
 {
+    @Bind(R.id.view_pager) ViewPager pager;
     @Override
     protected int getActivityView()
     {
@@ -59,7 +61,6 @@ public class BacaActivity extends BenihActivity
             fragments.add(fragment);
         }
 
-        ViewPager pager = (ViewPager) findViewById(R.id.view_pager);
         pager.setAdapter(new BacaPagerAdapter(getSupportFragmentManager(), fragments));
         pager.setCurrentItem(pos);
 
