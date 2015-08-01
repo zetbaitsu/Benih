@@ -25,7 +25,7 @@ import java.util.Random;
 /**
  * Created by zetbaitsu on 7/10/15.
  */
-public class Utils
+public class BenihUtils
 {
     public static int randInt(int min, int max)
     {

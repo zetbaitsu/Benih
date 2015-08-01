@@ -19,6 +19,6 @@ package id.zelory.benih.util;
 /**
  * Created by zetbaitsu on 7/13/15.
  */
-public class NetworkUtils
+public class BenihNetworkUtils
 {
 }

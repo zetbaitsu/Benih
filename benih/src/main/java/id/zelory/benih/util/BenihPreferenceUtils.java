@@ -22,7 +22,7 @@ import android.content.SharedPreferences;
 /**
  * Created by zetbaitsu on 7/10/15.
  */
-public class PrefUtils
+public class BenihPreferenceUtils
 {
     public static void putString(Context context, String key, String isi)
     {
