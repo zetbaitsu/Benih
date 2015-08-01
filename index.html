@@ -52,14 +52,130 @@ repositories {
 }
 
 dependencies {
-    compile <span class="pl-s"><span class="pl-pds">'</span>id.zelory.benih:benih:0.0.9<span class="pl-pds">'</span></span>
+    compile <span class="pl-s"><span class="pl-pds">'</span>id.zelory.benih:benih:0.1.1<span class="pl-pds">'</span></span>
 }</pre></div>
 
 <p>Berikut ini adalah salah satu contoh penggunaan Benih untuk melakukan parsing JSON dari web services (API) yang kemudian akan di ubah ke dalam bentuk Object Java dan kemudian ditampilkan dalam RecyclerView. Sangat mudah dan simple, untuk melihat contoh lainnya silahkan lihat pada aplikasi <a href="https://github.com/zetbaitsu/Benih/tree/master/benihtes">benihtes</a></p>
 
-<div class="highlight highlight-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">MainActivity</span> <span class="pl-k">extends</span> <span class="pl-e">BenihActivity</span>
+<h1>
+<a id="model" class="anchor" href="#model" aria-hidden="true"><span class="octicon octicon-link"></span></a>Model</h1>
+
+<div class="highlight highlight-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">Berita</span>
 {
-    <span class="pl-k">private</span> <span class="pl-smi">BenihRecyclerView</span> recyclerView;
+    <span class="pl-k">public</span> <span class="pl-smi">String</span> judul;
+    <span class="pl-k">public</span> <span class="pl-smi">String</span> alamat;
+    <span class="pl-k">public</span> <span class="pl-smi">String</span> gambar;
+    <span class="pl-k">public</span> <span class="pl-smi">String</span> tanggal;
+    <span class="pl-k">public</span> <span class="pl-smi">String</span> deskripsi;
+    <span class="pl-k">public</span> <span class="pl-smi">String</span> isi;
+}</pre></div>
+
+<h1>
+<a id="api-services" class="anchor" href="#api-services" aria-hidden="true"><span class="octicon octicon-link"></span></a>API Services</h1>
+
+<div class="highlight highlight-java"><pre><span class="pl-k">public</span> <span class="pl-k">enum</span> <span class="pl-en">TaniPediaService</span>
+{
+    <span class="pl-c1">HARVEST</span>;
+    <span class="pl-k">private</span> <span class="pl-k">final</span> <span class="pl-smi">Api</span> api;
+
+    <span class="pl-en">TaniPediaService</span>()
+    {
+        api <span class="pl-k">=</span> <span class="pl-smi">BenihServiceGenerator</span><span class="pl-k">.</span>createService(<span class="pl-smi">Api</span><span class="pl-k">.</span>class, <span class="pl-smi">Api</span><span class="pl-c1"><span class="pl-k">.</span>BASE_URL</span>);
+    }
+
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-smi">TaniPediaService</span> <span class="pl-en">pluck</span>()
+    {
+        <span class="pl-k">return</span> <span class="pl-c1">HARVEST</span>;
+    }
+
+    <span class="pl-k">public</span> <span class="pl-smi">Api</span> <span class="pl-en">getApi</span>()
+    {
+        <span class="pl-k">return</span> api;
+    }
+
+    <span class="pl-k">public</span> <span class="pl-k">interface</span> <span class="pl-en">Api</span>
+    {
+        <span class="pl-smi">String</span> <span class="pl-c1">BASE_URL</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>http://alamat-api.com<span class="pl-pds">"</span></span>;
+
+        <span class="pl-k">@GET</span>(<span class="pl-s"><span class="pl-pds">"</span>/berita<span class="pl-pds">"</span></span>)
+        <span class="pl-k">Observable&lt;<span class="pl-k">List&lt;<span class="pl-smi">Berita</span>&gt;</span>&gt;</span> <span class="pl-en">getAllBerita</span>();
+    }
+}</pre></div>
+
+<h1>
+<a id="controller" class="anchor" href="#controller" aria-hidden="true"><span class="octicon octicon-link"></span></a>Controller</h1>
+
+<div class="highlight highlight-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">BeritaController</span> <span class="pl-k">extends</span> <span class="pl-e">BenihController&lt;<span class="pl-smi">BeritaController</span>.Presenter</span>&gt;
+{
+    <span class="pl-k">public</span> <span class="pl-en">BeritaController</span>(<span class="pl-smi">Presenter</span> <span class="pl-v">presenter</span>)
+    {
+        <span class="pl-v">super</span>(presenter);
+    }
+
+    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">loadListBerita</span>()
+    {
+        <span class="pl-smi">TaniPediaService</span><span class="pl-k">.</span>pluck()
+                .getApi()
+                .getAllBerita()
+                .compose(<span class="pl-smi">BenihScheduler</span><span class="pl-k">.</span>pluck()<span class="pl-k">.</span>applySchedulers(<span class="pl-smi">BenihScheduler</span><span class="pl-k">.</span><span class="pl-smi">Type</span><span class="pl-c1"><span class="pl-k">.</span>IO</span>))
+                .subscribe(presenter<span class="pl-k">::</span>showListBerita, throwable <span class="pl-k">-</span><span class="pl-k">&gt;</span> presenter<span class="pl-k">.</span>showError(presenter, throwable));
+    }
+
+    <span class="pl-k">public</span> <span class="pl-k">interface</span> <span class="pl-en">Presenter</span> <span class="pl-k">extends</span> <span class="pl-e">BenihController</span>.<span class="pl-e">Presenter</span>
+    {
+        <span class="pl-k">void</span> <span class="pl-en">showListBerita</span>(<span class="pl-k">List&lt;<span class="pl-smi">Berita</span>&gt;</span> <span class="pl-v">listBerita</span>);
+    }
+}</pre></div>
+
+<h1>
+<a id="adapter" class="anchor" href="#adapter" aria-hidden="true"><span class="octicon octicon-link"></span></a>Adapter</h1>
+
+<div class="highlight highlight-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">BeritaRecyclerAdapter</span> <span class="pl-k">extends</span> <span class="pl-e">BenihRecyclerAdapter&lt;<span class="pl-smi">Berita</span>, <span class="pl-smi">BeritaHolder</span>&gt;</span>
+{
+    <span class="pl-k">public</span> <span class="pl-en">BeritaRecyclerAdapter</span>(<span class="pl-smi">Context</span> <span class="pl-v">context</span>)
+    {
+        <span class="pl-v">super</span>(context);
+    }
+
+    <span class="pl-k">@Override</span>
+    <span class="pl-k">protected</span> <span class="pl-k">int</span> <span class="pl-en">getItemView</span>(<span class="pl-k">int</span> <span class="pl-v">viewType</span>)
+    {
+        <span class="pl-k">return</span> <span class="pl-smi">R</span><span class="pl-k">.</span>layout<span class="pl-k">.</span>item_berita;
+    }
+
+    <span class="pl-k">@Override</span>
+    <span class="pl-k">public</span> <span class="pl-smi">BeritaHolder</span> <span class="pl-en">onCreateViewHolder</span>(<span class="pl-smi">ViewGroup</span> <span class="pl-v">parent</span>, <span class="pl-k">int</span> <span class="pl-v">viewType</span>)
+    {
+        <span class="pl-k">return</span> <span class="pl-k">new</span> <span class="pl-smi">BeritaHolder</span>(getView(parent, viewType), itemClickListener, longItemClickListener);
+    }
+}</pre></div>
+
+<h1>
+<a id="itemviewholder" class="anchor" href="#itemviewholder" aria-hidden="true"><span class="octicon octicon-link"></span></a>ItemViewHolder</h1>
+
+<div class="highlight highlight-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">BeritaHolder</span> <span class="pl-k">extends</span> <span class="pl-e">BenihViewHolder&lt;<span class="pl-smi">Berita</span>&gt;</span>
+{
+    <span class="pl-k">@Bind</span>(<span class="pl-smi">R</span><span class="pl-k">.</span>id<span class="pl-k">.</span>text) <span class="pl-smi">TextView</span> judul;
+
+    <span class="pl-k">public</span> <span class="pl-en">BeritaHolder</span>(<span class="pl-smi">View</span> <span class="pl-v">itemView</span>, <span class="pl-smi">OnItemClickListener</span> <span class="pl-v">itemClickListener</span>, <span class="pl-smi">OnLongItemClickListener</span> <span class="pl-v">longItemClickListener</span>)
+    {
+        <span class="pl-v">super</span>(itemView, itemClickListener, longItemClickListener);
+    }
+
+    <span class="pl-k">@Override</span>
+    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">bind</span>(<span class="pl-smi">Berita</span> <span class="pl-v">berita</span>)
+    {
+        judul<span class="pl-k">.</span>setText(berita<span class="pl-k">.</span>getJudul());
+    }
+}</pre></div>
+
+<h1>
+<a id="activity-atau-fragment" class="anchor" href="#activity-atau-fragment" aria-hidden="true"><span class="octicon octicon-link"></span></a>Activity atau Fragment</h1>
+
+<div class="highlight highlight-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">MainActivity</span> <span class="pl-k">extends</span> <span class="pl-e">BenihActivity</span> <span class="pl-k">implements</span> <span class="pl-e">BeritaController</span>.<span class="pl-e">Presenter</span>
+{
+    <span class="pl-k">@Bind</span>(<span class="pl-smi">R</span><span class="pl-k">.</span>id<span class="pl-k">.</span>recycler_view) <span class="pl-smi">BenihRecyclerView</span> recyclerView;
+    <span class="pl-k">private</span> <span class="pl-smi">BeritaController</span> beritaController;
     <span class="pl-k">private</span> <span class="pl-smi">BeritaRecyclerAdapter</span> adapter;
 
     <span class="pl-k">@Override</span>
@@ -71,25 +187,29 @@ dependencies {
     <span class="pl-k">@Override</span>
     <span class="pl-k">protected</span> <span class="pl-k">void</span> <span class="pl-en">onViewReady</span>(<span class="pl-smi">Bundle</span> <span class="pl-v">savedInstanceState</span>)
     {
-        recyclerView <span class="pl-k">=</span> (<span class="pl-smi">BenihRecyclerView</span>) findViewById(<span class="pl-smi">R</span><span class="pl-k">.</span>id<span class="pl-k">.</span>recycler_view);
-        recyclerView<span class="pl-k">.</span>setUpAsList();
         adapter <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">BeritaRecyclerAdapter</span>(<span class="pl-v">this</span>);
+        recyclerView<span class="pl-k">.</span>setUpAsList();
         recyclerView<span class="pl-k">.</span>setAdapter(adapter);
+        beritaController <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">BeritaController</span>(<span class="pl-v">this</span>);
+        beritaController<span class="pl-k">.</span>loadListBerita();
+    }
 
-        adapter<span class="pl-k">.</span>setOnItemClickListener((view, position) <span class="pl-k">-</span><span class="pl-k">&gt;</span> {
-            <span class="pl-smi">Intent</span> intent <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">Intent</span>(<span class="pl-v">this</span>, <span class="pl-smi">BacaActivity</span><span class="pl-k">.</span>class);
-            intent<span class="pl-k">.</span>putParcelableArrayListExtra(<span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span>, (<span class="pl-k">ArrayList&lt;<span class="pl-smi">Berita</span>&gt;</span>) adapter<span class="pl-k">.</span>getData());
-            intent<span class="pl-k">.</span>putExtra(<span class="pl-s"><span class="pl-pds">"</span>pos<span class="pl-pds">"</span></span>, position);
-            startActivity(intent);
-        });
+    <span class="pl-k">@Override</span>
+    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">showListBerita</span>(<span class="pl-k">List&lt;<span class="pl-smi">Berita</span>&gt;</span> <span class="pl-v">listBerita</span>)
+    {
+        adapter<span class="pl-k">.</span>add(listBerita);
+    }
 
-        <span class="pl-smi">TaniPediaClient</span> client <span class="pl-k">=</span> <span class="pl-smi">ServiceGenerator</span><span class="pl-k">.</span>createService(<span class="pl-smi">TaniPediaClient</span><span class="pl-k">.</span>class, <span class="pl-smi">TaniPediaClient</span><span class="pl-c1"><span class="pl-k">.</span>BASE_URL</span>);
-
-        client<span class="pl-k">.</span>getAllBerita()
-                .compose(<span class="pl-smi">BenihScheduler</span><span class="pl-k">.</span>applySchedulers(<span class="pl-smi">BenihScheduler</span><span class="pl-k">.</span><span class="pl-smi">Type</span><span class="pl-c1"><span class="pl-k">.</span>IO</span>))
-                .subscribe(data <span class="pl-k">-</span><span class="pl-k">&gt;</span> {
-                    adapter<span class="pl-k">.</span>add(data);
-                }, throwable <span class="pl-k">-</span><span class="pl-k">&gt;</span> log(throwable<span class="pl-k">.</span>getMessage()));
+    <span class="pl-k">@Override</span>
+    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">showError</span>(<span class="pl-smi">BenihController</span>.<span class="pl-smi">Presenter</span> <span class="pl-v">presenter</span>, <span class="pl-smi">Throwable</span> <span class="pl-v">throwable</span>)
+    {
+        <span class="pl-k">if</span> (presenter <span class="pl-k">instanceof</span> <span class="pl-smi">BeritaController</span><span class="pl-k">.</span><span class="pl-smi">Presenter</span>)
+        {
+            <span class="pl-smi">Snackbar</span><span class="pl-k">.</span>make(recyclerView, <span class="pl-s"><span class="pl-pds">"</span>Tidak dapat terhubung ke server!<span class="pl-pds">"</span></span>, <span class="pl-smi">Snackbar</span><span class="pl-c1"><span class="pl-k">.</span>LENGTH_LONG</span>)<span class="pl-k">.</span>show();
+        } <span class="pl-k">else</span>
+        {
+            log(<span class="pl-s"><span class="pl-pds">"</span>another presenter<span class="pl-pds">"</span></span>);
+        }
     }
 }</pre></div>
 
