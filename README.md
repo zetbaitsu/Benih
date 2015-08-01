@@ -30,16 +30,129 @@ repositories {
 }
 
 dependencies {
-    compile 'id.zelory.benih:benih:0.1.0'
+    compile 'id.zelory.benih:benih:0.1.1'
 }
 ```
 
 Berikut ini adalah salah satu contoh penggunaan Benih untuk melakukan parsing JSON dari web services (API) yang kemudian akan di ubah ke dalam bentuk Object Java dan kemudian ditampilkan dalam RecyclerView. Sangat mudah dan simple, untuk melihat contoh lainnya silahkan lihat pada aplikasi <a href="https://github.com/zetbaitsu/Benih/tree/master/benihtes">benihtes</a>
 
+#Model
 ```java
-public class MainActivity extends BenihActivity
+public class Berita
 {
-    private BenihRecyclerView recyclerView;
+    public String judul;
+    public String alamat;
+    public String gambar;
+    public String tanggal;
+    public String deskripsi;
+    public String isi;
+}
+```
+#API Services
+```java
+public enum TaniPediaService
+{
+    HARVEST;
+    private final Api api;
+
+    TaniPediaService()
+    {
+        api = BenihServiceGenerator.createService(Api.class, Api.BASE_URL);
+    }
+
+    public static TaniPediaService pluck()
+    {
+        return HARVEST;
+    }
+
+    public Api getApi()
+    {
+        return api;
+    }
+
+    public interface Api
+    {
+        String BASE_URL = "http://alamat-api.com";
+
+        @GET("/berita")
+        Observable<List<Berita>> getAllBerita();
+    }
+}
+```
+
+#Controller
+```java
+public class BeritaController extends BenihController<BeritaController.Presenter>
+{
+    public BeritaController(Presenter presenter)
+    {
+        super(presenter);
+    }
+
+    public void loadListBerita()
+    {
+        TaniPediaService.pluck()
+                .getApi()
+                .getAllBerita()
+                .compose(BenihScheduler.pluck().applySchedulers(BenihScheduler.Type.IO))
+                .subscribe(presenter::showListBerita, throwable -> presenter.showError(presenter, throwable));
+    }
+
+    public interface Presenter extends BenihController.Presenter
+    {
+        void showListBerita(List<Berita> listBerita);
+    }
+}
+```
+
+#Adapter
+```java
+public class BeritaRecyclerAdapter extends BenihRecyclerAdapter<Berita, BeritaHolder>
+{
+    public BeritaRecyclerAdapter(Context context)
+    {
+        super(context);
+    }
+
+    @Override
+    protected int getItemView(int viewType)
+    {
+        return R.layout.item_berita;
+    }
+
+    @Override
+    public BeritaHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    {
+        return new BeritaHolder(getView(parent, viewType), itemClickListener, longItemClickListener);
+    }
+}
+```
+
+#ItemViewHolder
+```java
+public class BeritaHolder extends BenihViewHolder<Berita>
+{
+    @Bind(R.id.text) TextView judul;
+
+    public BeritaHolder(View itemView, OnItemClickListener itemClickListener, OnLongItemClickListener longItemClickListener)
+    {
+        super(itemView, itemClickListener, longItemClickListener);
+    }
+
+    @Override
+    public void bind(Berita berita)
+    {
+        judul.setText(berita.getJudul());
+    }
+}
+```
+
+#Activity atau Fragment
+```java
+public class MainActivity extends BenihActivity implements BeritaController.Presenter
+{
+    @Bind(R.id.recycler_view) BenihRecyclerView recyclerView;
+    private BeritaController beritaController;
     private BeritaRecyclerAdapter adapter;
 
     @Override
@@ -51,25 +164,29 @@ public class MainActivity extends BenihActivity
     @Override
     protected void onViewReady(Bundle savedInstanceState)
     {
-        recyclerView = (BenihRecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.setUpAsList();
         adapter = new BeritaRecyclerAdapter(this);
+        recyclerView.setUpAsList();
         recyclerView.setAdapter(adapter);
+        beritaController = new BeritaController(this);
+        beritaController.loadListBerita();
+    }
 
-        adapter.setOnItemClickListener((view, position) -> {
-            Intent intent = new Intent(this, BacaActivity.class);
-            intent.putParcelableArrayListExtra("data", (ArrayList<Berita>) adapter.getData());
-            intent.putExtra("pos", position);
-            startActivity(intent);
-        });
+    @Override
+    public void showListBerita(List<Berita> listBerita)
+    {
+        adapter.add(listBerita);
+    }
 
-        TaniPediaClient client = ServiceGenerator.createService(TaniPediaClient.class, TaniPediaClient.BASE_URL);
-
-        client.getAllBerita()
-                .compose(BenihScheduler.pluck().applySchedulers(BenihScheduler.Type.IO))
-                .subscribe(data -> {
-                    adapter.add(data);
-                }, throwable -> log(throwable.getMessage()));
+    @Override
+    public void showError(BenihController.Presenter presenter, Throwable throwable)
+    {
+        if (presenter instanceof BeritaController.Presenter)
+        {
+            Snackbar.make(recyclerView, "Tidak dapat terhubung ke server!", Snackbar.LENGTH_LONG).show();
+        } else
+        {
+            log("another presenter");
+        }
     }
 }
 ```
