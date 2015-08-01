@@ -23,6 +23,7 @@ import android.support.v4.view.ViewPager;
 import java.util.Arrays;
 import java.util.List;
 
+import butterknife.Bind;
 import id.zelory.benih.BenihActivity;
 import id.zelory.benihtes.adapter.MyPagerAdapter;
 import id.zelory.benihtes.fragment.MyFragment;
@@ -32,6 +33,9 @@ import id.zelory.benihtes.fragment.MyFragment;
  */
 public class SecondActivity extends BenihActivity
 {
+    @Bind(R.id.view_pager) ViewPager viewPager;
+    @Bind(R.id.tab_layout) TabLayout tabLayout;
+
     @Override
     protected int getActivityView()
     {
@@ -41,13 +45,10 @@ public class SecondActivity extends BenihActivity
     @Override
     protected void onViewReady(Bundle savedInstanceState)
     {
-        ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         List<MyFragment> fragments = Arrays.asList(new MyFragment(), new MyFragment());
         List<String> titles = Arrays.asList("Fragment 1", "Fragment 2");
         MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager(), fragments, titles);
         viewPager.setAdapter(adapter);
-
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
     }
 }
