@@ -178,15 +178,9 @@ public class MainActivity extends BenihActivity implements BeritaController.Pres
     }
 
     @Override
-    public void showError(BenihController.Presenter presenter, Throwable throwable)
+    public void showError(Throwable throwable)
     {
-        if (presenter instanceof BeritaController.Presenter)
-        {
-            Snackbar.make(recyclerView, "Tidak dapat terhubung ke server!", Snackbar.LENGTH_LONG).show();
-        } else
-        {
-            log("another presenter");
-        }
+        Snackbar.make(recyclerView, "Tidak dapat terhubung ke server!", Snackbar.LENGTH_LONG).show();
     }
 }
 ```
