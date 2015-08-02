@@ -52,7 +52,7 @@ repositories {
 }
 
 dependencies {
-    compile <span class="pl-s"><span class="pl-pds">'</span>id.zelory.benih:benih:0.1.1<span class="pl-pds">'</span></span>
+    compile <span class="pl-s"><span class="pl-pds">'</span>id.zelory.benih:benih:0.1.2<span class="pl-pds">'</span></span>
 }</pre></div>
 
 <p>Berikut ini adalah salah satu contoh penggunaan Benih untuk melakukan parsing JSON dari web services (API) yang kemudian akan di ubah ke dalam bentuk Object Java dan kemudian ditampilkan dalam RecyclerView. Sangat mudah dan simple, untuk melihat contoh lainnya silahkan lihat pada aplikasi <a href="https://github.com/zetbaitsu/Benih/tree/master/benihtes">benihtes</a></p>
@@ -201,15 +201,9 @@ dependencies {
     }
 
     <span class="pl-k">@Override</span>
-    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">showError</span>(<span class="pl-smi">BenihController</span>.<span class="pl-smi">Presenter</span> <span class="pl-v">presenter</span>, <span class="pl-smi">Throwable</span> <span class="pl-v">throwable</span>)
+    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">showError</span>(<span class="pl-smi">Throwable</span> <span class="pl-v">throwable</span>)
     {
-        <span class="pl-k">if</span> (presenter <span class="pl-k">instanceof</span> <span class="pl-smi">BeritaController</span><span class="pl-k">.</span><span class="pl-smi">Presenter</span>)
-        {
-            <span class="pl-smi">Snackbar</span><span class="pl-k">.</span>make(recyclerView, <span class="pl-s"><span class="pl-pds">"</span>Tidak dapat terhubung ke server!<span class="pl-pds">"</span></span>, <span class="pl-smi">Snackbar</span><span class="pl-c1"><span class="pl-k">.</span>LENGTH_LONG</span>)<span class="pl-k">.</span>show();
-        } <span class="pl-k">else</span>
-        {
-            log(<span class="pl-s"><span class="pl-pds">"</span>another presenter<span class="pl-pds">"</span></span>);
-        }
+        <span class="pl-smi">Snackbar</span><span class="pl-k">.</span>make(recyclerView, <span class="pl-s"><span class="pl-pds">"</span>Tidak dapat terhubung ke server!<span class="pl-pds">"</span></span>, <span class="pl-smi">Snackbar</span><span class="pl-c1"><span class="pl-k">.</span>LENGTH_LONG</span>)<span class="pl-k">.</span>show();
     }
 }</pre></div>
 
