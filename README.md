@@ -142,7 +142,7 @@ public class BeritaHolder extends BenihViewHolder<Berita>
     @Override
     public void bind(Berita berita)
     {
-        judul.setText(berita.getJudul());
+        judul.setText(berita.judul);
     }
 }
 ```
