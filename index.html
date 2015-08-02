@@ -118,7 +118,7 @@ dependencies {
                 .getApi()
                 .getAllBerita()
                 .compose(<span class="pl-smi">BenihScheduler</span><span class="pl-k">.</span>pluck()<span class="pl-k">.</span>applySchedulers(<span class="pl-smi">BenihScheduler</span><span class="pl-k">.</span><span class="pl-smi">Type</span><span class="pl-c1"><span class="pl-k">.</span>IO</span>))
-                .subscribe(presenter<span class="pl-k">::</span>showListBerita, throwable <span class="pl-k">-</span><span class="pl-k">&gt;</span> presenter<span class="pl-k">.</span>showError(presenter, throwable));
+                .subscribe(presenter<span class="pl-k">::</span>showListBerita, presenter<span class="pl-k">::</span>showError);
     }
 
     <span class="pl-k">public</span> <span class="pl-k">interface</span> <span class="pl-en">Presenter</span> <span class="pl-k">extends</span> <span class="pl-e">BenihController</span>.<span class="pl-e">Presenter</span>
