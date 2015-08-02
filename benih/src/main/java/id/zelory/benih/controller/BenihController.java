@@ -17,7 +17,8 @@
 package id.zelory.benih.controller;
 
 import android.os.Bundle;
-import android.util.Log;
+
+import timber.log.Timber;
 
 /**
  * Created by zetbaitsu on 7/29/15.
@@ -29,26 +30,15 @@ public abstract class BenihController<P extends BenihController.Presenter>
     public BenihController(P presenter)
     {
         this.presenter = presenter;
+        Timber.tag(getClass().getSimpleName());
     }
 
     public abstract void saveState(Bundle bundle);
 
     public abstract void loadState(Bundle bundle);
 
-    protected void log(String message)
-    {
-        try
-        {
-            Log.d(this.getClass().getSimpleName(), message);
-        } catch (Exception var3)
-        {
-            Log.d(this.getClass().getSimpleName(), "Null message.");
-        }
-
-    }
-
     public interface Presenter
     {
-        void showError(Presenter presenter, Throwable throwable);
+        void showError(Throwable throwable);
     }
 }

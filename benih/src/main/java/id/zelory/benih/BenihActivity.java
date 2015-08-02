@@ -7,6 +7,7 @@ import android.util.Log;
 import butterknife.ButterKnife;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 public abstract class BenihActivity extends AppCompatActivity
 {
@@ -19,6 +20,7 @@ public abstract class BenihActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(getActivityView());
         ButterKnife.bind(this);
+        Timber.tag(getClass().getSimpleName());
         subscriptionCollector = new CompositeSubscription();
         onViewReady(savedInstanceState);
     }
@@ -42,16 +44,5 @@ public abstract class BenihActivity extends AppCompatActivity
             subscriptionCollector = null;
         }
         super.onDestroy();
-    }
-
-    protected void log(String message)
-    {
-        try
-        {
-            Log.d(getClass().getSimpleName(), message);
-        } catch (Exception e)
-        {
-            Log.d(getClass().getSimpleName(), "Null message.");
-        }
     }
 }

@@ -21,7 +21,7 @@ import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +30,7 @@ import butterknife.ButterKnife;
 import id.zelory.benih.BenihActivity;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 /**
  * Created by zetbaitsu on 7/10/15.
@@ -49,6 +50,7 @@ public abstract class BenihFragment<Data extends Parcelable> extends Fragment
     public void onCreate(@Nullable Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        Timber.tag(getClass().getSimpleName());
         subscriptionCollector = new CompositeSubscription();
     }
 
@@ -111,17 +113,6 @@ public abstract class BenihFragment<Data extends Parcelable> extends Fragment
         super.onDestroy();
     }
 
-    protected void log(String message)
-    {
-        try
-        {
-            Log.d(getClass().getSimpleName(), message);
-        } catch (Exception e)
-        {
-            Log.d(getClass().getSimpleName(), "Null message.");
-        }
-    }
-
     public void replace(int containerId, BenihFragment fragment, boolean addToBackStack)
     {
         if (addToBackStack)
@@ -158,5 +149,10 @@ public abstract class BenihFragment<Data extends Parcelable> extends Fragment
     protected ActionBar getSupportActionBar()
     {
         return ((BenihActivity) getActivity()).getSupportActionBar();
+    }
+
+    protected void setSupportActionBar(Toolbar toolbar)
+    {
+        ((BenihActivity) getActivity()).setSupportActionBar(toolbar);
     }
 }

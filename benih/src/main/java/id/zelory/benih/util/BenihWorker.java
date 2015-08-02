@@ -31,7 +31,7 @@ public enum BenihWorker
         return HARVEST;
     }
 
-    public Observable<Object> doThis(final Runnable runnable)
+    public Observable<Object> doInComputation(final Runnable runnable)
     {
         return Observable.create(new Observable.OnSubscribe<Object>()
         {
@@ -45,5 +45,37 @@ public enum BenihWorker
                 }
             }
         }).compose(BenihScheduler.pluck().applySchedulers(BenihScheduler.Type.COMPUTATION));
+    }
+
+    public Observable<Object> doInIO(final Runnable runnable)
+    {
+        return Observable.create(new Observable.OnSubscribe<Object>()
+        {
+            @Override
+            public void call(Subscriber<? super Object> subscriber)
+            {
+                runnable.run();
+                if (!subscriber.isUnsubscribed())
+                {
+                    subscriber.onNext("We are done bro!");
+                }
+            }
+        }).compose(BenihScheduler.pluck().applySchedulers(BenihScheduler.Type.IO));
+    }
+
+    public Observable<Object> doInNewThread(final Runnable runnable)
+    {
+        return Observable.create(new Observable.OnSubscribe<Object>()
+        {
+            @Override
+            public void call(Subscriber<? super Object> subscriber)
+            {
+                runnable.run();
+                if (!subscriber.isUnsubscribed())
+                {
+                    subscriber.onNext("We are done bro!");
+                }
+            }
+        }).compose(BenihScheduler.pluck().applySchedulers(BenihScheduler.Type.NEW_THREAD));
     }
 }

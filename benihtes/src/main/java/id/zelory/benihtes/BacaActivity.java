@@ -28,6 +28,7 @@ import id.zelory.benih.util.BenihBus;
 import id.zelory.benihtes.adapter.BacaPagerAdapter;
 import id.zelory.benihtes.fragment.BacaFragment;
 import id.zelory.benihtes.model.Berita;
+import timber.log.Timber;
 
 /**
  * Created by zetbaitsu on 7/12/15.
@@ -46,7 +47,7 @@ public class BacaActivity extends BenihActivity
     {
         subscription = BenihBus.pluck()
                 .receive()
-                .subscribe(o -> log("from BacaActivity : " + o.toString()));
+                .subscribe(o -> Timber.d("from BacaActivity : " + o.toString()));
         subscriptionCollector.add(subscription);
 
         int pos = getIntent().getIntExtra("pos", 0);

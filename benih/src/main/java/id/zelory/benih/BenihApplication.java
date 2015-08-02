@@ -17,7 +17,8 @@
 package id.zelory.benih;
 
 import android.app.Application;
-import android.util.Log;
+
+import timber.log.Timber;
 
 /**
  * Created by zetbaitsu on 7/13/15.
@@ -28,17 +29,10 @@ public class BenihApplication extends Application
     public void onCreate()
     {
         super.onCreate();
-        log("Apps starting");
-    }
-
-    protected void log(String message)
-    {
-        try
+        if (BuildConfig.DEBUG)
         {
-            Log.d(getClass().getSimpleName(), message);
-        } catch (Exception e)
-        {
-            Log.d(getClass().getSimpleName(), "Null message.");
+            Timber.plant(new Timber.DebugTree());
+            Timber.tag(getClass().getSimpleName());
         }
     }
 }

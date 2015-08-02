@@ -18,16 +18,17 @@ package id.zelory.benih.adapter;
 
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.util.Log;
 
 import java.util.List;
 
 import id.zelory.benih.fragment.BenihFragment;
+import timber.log.Timber;
 
 /**
  * Created by zetbaitsu on 7/10/15.
  */
-public abstract class BenihPagerAdapter<Fragment extends BenihFragment> extends FragmentStatePagerAdapter
+public abstract class BenihPagerAdapter<Fragment extends BenihFragment> extends
+        FragmentStatePagerAdapter
 {
     protected List<Fragment> fragments;
     protected List<String> titles;
@@ -36,6 +37,7 @@ public abstract class BenihPagerAdapter<Fragment extends BenihFragment> extends 
     {
         super(fm);
         this.fragments = fragments;
+        Timber.tag(getClass().getSimpleName());
     }
 
     public BenihPagerAdapter(FragmentManager fm, List<Fragment> fragments, List<String> titles)
@@ -43,6 +45,7 @@ public abstract class BenihPagerAdapter<Fragment extends BenihFragment> extends 
         super(fm);
         this.fragments = fragments;
         this.titles = titles;
+        Timber.tag(getClass().getSimpleName());
     }
 
     @Override
@@ -78,16 +81,5 @@ public abstract class BenihPagerAdapter<Fragment extends BenihFragment> extends 
     public CharSequence getPageTitle(int position)
     {
         return titles.size() == fragments.size() ? titles.get(position) : super.getPageTitle(position);
-    }
-
-    protected void log(String message)
-    {
-        try
-        {
-            Log.d(getClass().getSimpleName(), message);
-        }catch (Exception e)
-        {
-            Log.d(getClass().getSimpleName(), "Null message.");
-        }
     }
 }

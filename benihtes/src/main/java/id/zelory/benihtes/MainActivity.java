@@ -20,6 +20,7 @@ import id.zelory.benih.view.BenihRecyclerView;
 import id.zelory.benihtes.adapter.BeritaRecyclerAdapter;
 import id.zelory.benihtes.controller.BeritaController;
 import id.zelory.benihtes.model.Berita;
+import timber.log.Timber;
 
 public class MainActivity extends BenihActivity implements BeritaController.Presenter
 {
@@ -38,7 +39,7 @@ public class MainActivity extends BenihActivity implements BeritaController.Pres
     {
         subscription = BenihBus.pluck()
                 .receive()
-                .subscribe(o -> log(o.toString()), throwable -> log(throwable.getMessage()));
+                .subscribe(o -> Timber.d(o.toString()), throwable -> Timber.d(throwable.getMessage()));
         subscriptionCollector.add(subscription);
 
         setUpAdapter();
@@ -48,6 +49,8 @@ public class MainActivity extends BenihActivity implements BeritaController.Pres
         beritaController.doSomeThing();
 
         doSomeDummyThread();
+        Timber.d(null);
+        Timber.d("View Ready bro..");
     }
 
     private void setUpAdapter()
@@ -90,7 +93,7 @@ public class MainActivity extends BenihActivity implements BeritaController.Pres
         {
             final int thread = i;
             subscription = BenihWorker.pluck()
-                    .doThis(() -> {
+                    .doInComputation(() -> {
                         for (int j = 0; j < 10000; j++)
                         {
                             for (int k = 0; k < j; k++)
@@ -101,7 +104,7 @@ public class MainActivity extends BenihActivity implements BeritaController.Pres
                                 c = c / (j - k);
                             }
                         }
-                    }).subscribe(o -> log("Worker " + thread + " is done."), throwable -> log(throwable.getMessage()));
+                    }).subscribe(o -> Timber.d("Worker " + thread + " is done."), throwable -> Timber.d(throwable.getMessage()));
             subscriptionCollector.add(subscription);
         }
     }
@@ -150,15 +153,9 @@ public class MainActivity extends BenihActivity implements BeritaController.Pres
     }
 
     @Override
-    public void showError(BenihController.Presenter presenter, Throwable throwable)
+    public void showError(Throwable throwable)
     {
-        if (presenter instanceof BeritaController.Presenter)
-        {
-            Snackbar.make(recyclerView, "Something wrong!", Snackbar.LENGTH_LONG).show();
-        } else
-        {
-            log("another presenter");
-        }
+        Snackbar.make(recyclerView, "Something wrong!", Snackbar.LENGTH_LONG).show();
     }
 
     @Override

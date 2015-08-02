@@ -26,6 +26,7 @@ import id.zelory.benih.util.BenihScheduler;
 import id.zelory.benih.util.BenihWorker;
 import id.zelory.benihtes.model.Berita;
 import id.zelory.benihtes.network.TaniPediaService;
+import timber.log.Timber;
 
 /**
  * Created by zetbaitsu on 7/29/15.
@@ -38,7 +39,7 @@ public class BeritaController extends BenihController<BeritaController.Presenter
     public BeritaController(Presenter presenter)
     {
         super(presenter);
-        log("BeritaController created");
+        Timber.d("BeritaController created");
     }
 
     public void loadListBerita()
@@ -51,8 +52,8 @@ public class BeritaController extends BenihController<BeritaController.Presenter
                     this.listBerita = listBerita;
                     presenter.showListBerita(listBerita);
                 }, throwable -> {
-                    log(throwable.getMessage());
-                    presenter.showError(presenter, throwable);
+                    Timber.d(throwable.getMessage());
+                    presenter.showError(throwable);
                 });
     }
 
@@ -66,8 +67,8 @@ public class BeritaController extends BenihController<BeritaController.Presenter
                     this.berita = berita;
                     presenter.showBerita(berita);
                 }, throwable -> {
-                    log(throwable.getMessage());
-                    presenter.showError(presenter, throwable);
+                    Timber.d(throwable.getMessage());
+                    presenter.showError(throwable);
                 });
     }
 
@@ -85,11 +86,11 @@ public class BeritaController extends BenihController<BeritaController.Presenter
     public void doSomeThing()
     {
         BenihWorker.pluck()
-                .doThis(this::doThing)
+                .doInComputation(this::doThing)
                 .subscribe(o -> {
-                    log(o.toString());
+                    Timber.d(o.toString());
                     presenter.showSomeThing();
-                }, throwable -> log(throwable.getMessage()));
+                }, throwable -> Timber.d(throwable.getMessage()));
     }
 
     @Override
@@ -108,7 +109,7 @@ public class BeritaController extends BenihController<BeritaController.Presenter
             presenter.showListBerita(listBerita);
         } else
         {
-            presenter.showError(presenter, new Throwable("Error"));
+            presenter.showError(new Throwable("Error"));
         }
 
         berita = bundle.getParcelable("berita");
@@ -117,7 +118,7 @@ public class BeritaController extends BenihController<BeritaController.Presenter
             presenter.showBerita(berita);
         } else
         {
-            presenter.showError(presenter, new Throwable("Error"));
+            presenter.showError(new Throwable("Error"));
         }
     }
 

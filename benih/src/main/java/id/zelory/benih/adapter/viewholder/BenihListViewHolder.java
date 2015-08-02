@@ -16,10 +16,10 @@
 
 package id.zelory.benih.adapter.viewholder;
 
-import android.util.Log;
 import android.view.View;
 
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 /**
  * Created by zetbaitsu on 7/29/15.
@@ -29,18 +29,8 @@ public abstract class BenihListViewHolder<Data>
     public BenihListViewHolder(View itemView)
     {
         ButterKnife.bind(this, itemView);
+        Timber.tag(getClass().getSimpleName());
     }
 
     public abstract void bind(Data data);
-
-    protected void log(String message)
-    {
-        try
-        {
-            Log.d(getClass().getSimpleName(), message);
-        } catch (Exception e)
-        {
-            Log.d(getClass().getSimpleName(), "Null message.");
-        }
-    }
 }

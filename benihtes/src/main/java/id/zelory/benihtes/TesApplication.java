@@ -19,6 +19,7 @@ package id.zelory.benihtes;
 import com.squareup.leakcanary.LeakCanary;
 
 import id.zelory.benih.BenihApplication;
+import timber.log.Timber;
 
 /**
  * Created by zetbaitsu on 7/30/15.
@@ -30,5 +31,9 @@ public class TesApplication extends BenihApplication
     {
         super.onCreate();
         LeakCanary.install(this);
+        if (BuildConfig.DEBUG)
+        {
+            Timber.plant(new Timber.DebugTree());
+        }
     }
 }

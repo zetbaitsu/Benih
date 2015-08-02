@@ -17,7 +17,6 @@
 package id.zelory.benih.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +28,7 @@ import java.util.List;
 import id.zelory.benih.adapter.viewholder.BenihListViewHolder;
 import id.zelory.benih.util.BenihWorker;
 import rx.functions.Action1;
+import timber.log.Timber;
 
 /**
  * Created by zetbaitsu on 7/10/15.
@@ -42,12 +42,14 @@ public abstract class BenihListAdapter<Data, Holder extends BenihListViewHolder>
     {
         this.context = context;
         data = new ArrayList<>();
+        Timber.tag(getClass().getSimpleName());
     }
 
     public BenihListAdapter(Context context, List<Data> data)
     {
         this.context = context;
         this.data = data;
+        Timber.tag(getClass().getSimpleName());
     }
 
     @Override
@@ -118,7 +120,7 @@ public abstract class BenihListAdapter<Data, Holder extends BenihListViewHolder>
     {
         final int size = items.size();
         BenihWorker.pluck()
-                .doThis(new Runnable()
+                .doInComputation(new Runnable()
                 {
                     @Override
                     public void run()
@@ -155,16 +157,5 @@ public abstract class BenihListAdapter<Data, Holder extends BenihListViewHolder>
     {
         data.clear();
         notifyDataSetChanged();
-    }
-
-    protected void log(String message)
-    {
-        try
-        {
-            Log.d(getClass().getSimpleName(), message);
-        } catch (Exception e)
-        {
-            Log.d(getClass().getSimpleName(), "Null message.");
-        }
     }
 }

@@ -17,11 +17,13 @@
 package id.zelory.benih.adapter.viewholder;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import butterknife.ButterKnife;
-import id.zelory.benih.adapter.BenihRecyclerAdapter;
+import timber.log.Timber;
+
+import static id.zelory.benih.adapter.BenihRecyclerAdapter.OnItemClickListener;
+import static id.zelory.benih.adapter.BenihRecyclerAdapter.OnLongItemClickListener;
 
 /**
  * Created by zetbaitsu on 7/10/15.
@@ -30,13 +32,14 @@ public abstract class BenihViewHolder<Data> extends RecyclerView.ViewHolder impl
         View.OnClickListener,
         View.OnLongClickListener
 {
-    private BenihRecyclerAdapter.OnItemClickListener itemClickListener;
-    private BenihRecyclerAdapter.OnLongItemClickListener longItemClickListener;
+    private OnItemClickListener itemClickListener;
+    private OnLongItemClickListener longItemClickListener;
 
-    public BenihViewHolder(View itemView, BenihRecyclerAdapter.OnItemClickListener itemClickListener, BenihRecyclerAdapter.OnLongItemClickListener longItemClickListener)
+    public BenihViewHolder(View itemView, OnItemClickListener itemClickListener, OnLongItemClickListener longItemClickListener)
     {
         super(itemView);
         ButterKnife.bind(this, itemView);
+        Timber.tag(getClass().getSimpleName());
         this.itemClickListener = itemClickListener;
         this.longItemClickListener = longItemClickListener;
         itemView.setOnClickListener(this);
@@ -51,17 +54,6 @@ public abstract class BenihViewHolder<Data> extends RecyclerView.ViewHolder impl
         if (itemClickListener != null)
         {
             itemClickListener.onItemClick(v, getAdapterPosition());
-        }
-    }
-
-    protected void log(String message)
-    {
-        try
-        {
-            Log.d(getClass().getSimpleName(), message);
-        } catch (Exception e)
-        {
-            Log.d(getClass().getSimpleName(), "Null message.");
         }
     }
 

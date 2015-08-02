@@ -18,18 +18,17 @@ package id.zelory.benihtes.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.View;
 import android.widget.TextView;
 
 import java.util.List;
 
 import butterknife.Bind;
-import id.zelory.benih.controller.BenihController;
 import id.zelory.benih.fragment.BenihFragment;
 import id.zelory.benih.util.BenihBus;
 import id.zelory.benihtes.R;
 import id.zelory.benihtes.controller.BeritaController;
 import id.zelory.benihtes.model.Berita;
+import timber.log.Timber;
 
 /**
  * Created by zetbaitsu on 7/12/15.
@@ -50,7 +49,7 @@ public class BacaFragment extends BenihFragment<Berita> implements BeritaControl
     {
         subscription = BenihBus.pluck()
                 .receive()
-                .subscribe(o -> log("from BacaFragment : " + o.toString()));
+                .subscribe(o -> Timber.d("from BacaFragment : " + o.toString()));
         subscriptionCollector.add(subscription);
 
         setUpController(savedInstanceState);
@@ -102,7 +101,7 @@ public class BacaFragment extends BenihFragment<Berita> implements BeritaControl
     }
 
     @Override
-    public void showError(BenihController.Presenter presenter, Throwable throwable)
+    public void showError(Throwable throwable)
     {
 
     }
