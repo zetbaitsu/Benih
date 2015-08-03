@@ -95,7 +95,7 @@ public class BeritaController extends BenihController<BeritaController.Presenter
                 .getApi()
                 .getAllBerita()
                 .compose(BenihScheduler.pluck().applySchedulers(BenihScheduler.Type.IO))
-                .subscribe(presenter::showListBerita, throwable -> presenter.showError(presenter, throwable));
+                .subscribe(presenter::showListBerita, presenter::showError);
     }
 
     public interface Presenter extends BenihController.Presenter
