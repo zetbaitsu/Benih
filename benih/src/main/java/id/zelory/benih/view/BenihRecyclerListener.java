@@ -19,6 +19,7 @@ package id.zelory.benih.view;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 
 /**
  * Created by zetbaitsu on 7/28/15.
@@ -34,6 +35,7 @@ public abstract class BenihRecyclerListener extends RecyclerView.OnScrollListene
     private int currentPage = 0;
     private LinearLayoutManager linearLayoutManager;
     private GridLayoutManager gridLayoutManager;
+    private StaggeredGridLayoutManager staggeredGridLayoutManager;
 
     public BenihRecyclerListener(LinearLayoutManager linearLayoutManager)
     {
@@ -43,6 +45,11 @@ public abstract class BenihRecyclerListener extends RecyclerView.OnScrollListene
     public BenihRecyclerListener(GridLayoutManager gridLayoutManager)
     {
         this.gridLayoutManager = gridLayoutManager;
+    }
+
+    public BenihRecyclerListener(StaggeredGridLayoutManager staggeredGridLayoutManager)
+    {
+        this.staggeredGridLayoutManager = staggeredGridLayoutManager;
     }
 
     public BenihRecyclerListener(LinearLayoutManager linearLayoutManager, int visibleThreshold)
@@ -57,20 +64,35 @@ public abstract class BenihRecyclerListener extends RecyclerView.OnScrollListene
         this.visibleThreshold = visibleThreshold;
     }
 
+    public BenihRecyclerListener(StaggeredGridLayoutManager staggeredGridLayoutManager, int visibleThreshold)
+    {
+        this.staggeredGridLayoutManager = staggeredGridLayoutManager;
+        this.visibleThreshold = visibleThreshold;
+    }
+
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy)
     {
         super.onScrolled(recyclerView, dx, dy);
 
         visibleItemCount = recyclerView.getChildCount();
-        if (gridLayoutManager == null)
+        if (linearLayoutManager != null)
         {
             totalItemCount = linearLayoutManager.getItemCount();
             firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
-        } else if (linearLayoutManager == null)
+        } else if (gridLayoutManager != null)
         {
             totalItemCount = gridLayoutManager.getItemCount();
             firstVisibleItem = gridLayoutManager.findFirstVisibleItemPosition();
+        } else if (staggeredGridLayoutManager != null)
+        {
+            totalItemCount = staggeredGridLayoutManager.getItemCount();
+            int[] tmp = null;
+            tmp = staggeredGridLayoutManager.findFirstCompletelyVisibleItemPositions(tmp);
+            if (tmp != null && tmp.length > 0)
+            {
+                firstVisibleItem = tmp[0];
+            }
         }
 
         if (loading && totalItemCount > previousTotal)
