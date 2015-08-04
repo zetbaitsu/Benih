@@ -1,3 +1,7 @@
 <component name="CopyrightManager">
-  <settings default="Zetbaitsu" />
+  <settings default="Zetbaitsu">
+    <module2copyright>
+      <element module="All" copyright="Zetbaitsu" />
+    </module2copyright>
+  </settings>
 </component>
