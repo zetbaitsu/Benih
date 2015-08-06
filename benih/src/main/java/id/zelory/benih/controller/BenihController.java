@@ -18,6 +18,8 @@ package id.zelory.benih.controller;
 
 import android.os.Bundle;
 
+import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 /**
@@ -26,16 +28,35 @@ import timber.log.Timber;
 public abstract class BenihController<P extends BenihController.Presenter>
 {
     protected P presenter;
+    protected Subscription subscription;
+    protected CompositeSubscription subscriptionCollector;
 
     public BenihController(P presenter)
     {
         this.presenter = presenter;
+        if (subscriptionCollector == null)
+        {
+            subscriptionCollector = new CompositeSubscription();
+        }
         Timber.tag(getClass().getSimpleName());
     }
 
     public abstract void saveState(Bundle bundle);
 
     public abstract void loadState(Bundle bundle);
+
+    public void unSubscribe()
+    {
+        if (subscription != null)
+        {
+            subscription.unsubscribe();
+        }
+
+        if (subscriptionCollector != null)
+        {
+            subscriptionCollector.unsubscribe();
+        }
+    }
 
     public interface Presenter
     {
