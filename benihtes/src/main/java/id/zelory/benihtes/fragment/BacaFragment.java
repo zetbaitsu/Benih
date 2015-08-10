@@ -20,6 +20,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.TextView;
 
+import com.trello.rxlifecycle.FragmentEvent;
+
 import java.util.List;
 
 import butterknife.Bind;
@@ -47,10 +49,10 @@ public class BacaFragment extends BenihFragment<Berita> implements BeritaControl
     @Override
     protected void onViewReady(@Nullable Bundle savedInstanceState)
     {
-        subscription = BenihBus.pluck()
+        BenihBus.pluck()
                 .receive()
+                .compose(bindUntilEvent(FragmentEvent.DESTROY))
                 .subscribe(o -> Timber.d("from BacaFragment : " + o.toString()));
-        subscriptionCollector.add(subscription);
 
         setUpController(savedInstanceState);
     }

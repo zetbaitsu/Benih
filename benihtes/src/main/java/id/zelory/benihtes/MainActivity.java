@@ -24,6 +24,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.trello.rxlifecycle.ActivityEvent;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,10 +54,10 @@ public class MainActivity extends BenihActivity implements BeritaController.Pres
     @Override
     protected void onViewReady(Bundle savedInstanceState)
     {
-        subscription = BenihBus.pluck()
+        BenihBus.pluck()
                 .receive()
+                .compose(bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(o -> Timber.d(o.toString()), throwable -> Timber.d(throwable.getMessage()));
-        subscriptionCollector.add(subscription);
 
         setUpAdapter();
         setUpRecyclerView();
@@ -64,8 +66,6 @@ public class MainActivity extends BenihActivity implements BeritaController.Pres
         beritaController.doSomeThing();
 
         doSomeDummyThread();
-        Timber.d(null);
-        Timber.d("View Ready bro..");
     }
 
     private void setUpAdapter()
@@ -107,7 +107,7 @@ public class MainActivity extends BenihActivity implements BeritaController.Pres
         for (int i = 0; i < 10; i++)
         {
             final int thread = i;
-            subscription = BenihWorker.pluck()
+            BenihWorker.pluck()
                     .doInComputation(() -> {
                         for (int j = 0; j < 10000; j++)
                         {
@@ -119,8 +119,9 @@ public class MainActivity extends BenihActivity implements BeritaController.Pres
                                 c = c / (j - k);
                             }
                         }
-                    }).subscribe(o -> Timber.d("Worker " + thread + " is done."), throwable -> Timber.d(throwable.getMessage()));
-            subscriptionCollector.add(subscription);
+                    })
+                    .compose(bindUntilEvent(ActivityEvent.DESTROY))
+                    .subscribe(o -> Timber.d("Worker " + thread + " is done."), throwable -> Timber.d(throwable.getMessage()));
         }
     }
 

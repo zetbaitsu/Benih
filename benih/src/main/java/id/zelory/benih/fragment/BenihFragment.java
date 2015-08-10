@@ -19,12 +19,13 @@ package id.zelory.benih.fragment;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.trello.rxlifecycle.components.support.RxFragment;
 
 import butterknife.ButterKnife;
 import id.zelory.benih.BenihActivity;
@@ -35,11 +36,9 @@ import timber.log.Timber;
 /**
  * Created by zetbaitsu on 7/10/15.
  */
-public abstract class BenihFragment<Data extends Parcelable> extends Fragment
+public abstract class BenihFragment<Data extends Parcelable> extends RxFragment
 {
     protected Data data;
-    protected Subscription subscription;
-    protected CompositeSubscription subscriptionCollector;
 
     public BenihFragment()
     {
@@ -51,7 +50,6 @@ public abstract class BenihFragment<Data extends Parcelable> extends Fragment
     {
         super.onCreate(savedInstanceState);
         Timber.tag(getClass().getSimpleName());
-        subscriptionCollector = new CompositeSubscription();
     }
 
     @Nullable
@@ -98,17 +96,6 @@ public abstract class BenihFragment<Data extends Parcelable> extends Fragment
     @Override
     public void onDestroy()
     {
-        if (subscription != null)
-        {
-            subscription.unsubscribe();
-            subscription = null;
-        }
-
-        if (subscriptionCollector != null)
-        {
-            subscriptionCollector.unsubscribe();
-            subscriptionCollector = null;
-        }
         data = null;
         super.onDestroy();
     }

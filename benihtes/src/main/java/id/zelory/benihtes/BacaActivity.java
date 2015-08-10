@@ -19,6 +19,8 @@ package id.zelory.benihtes;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 
+import com.trello.rxlifecycle.ActivityEvent;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,10 +47,10 @@ public class BacaActivity extends BenihActivity
     @Override
     protected void onViewReady(Bundle savedInstanceState)
     {
-        subscription = BenihBus.pluck()
+        BenihBus.pluck()
                 .receive()
+                .compose(bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(o -> Timber.d("from BacaActivity : " + o.toString()));
-        subscriptionCollector.add(subscription);
 
         int pos = getIntent().getIntExtra("pos", 0);
         ArrayList<Berita> data = getIntent().getParcelableArrayListExtra("data");

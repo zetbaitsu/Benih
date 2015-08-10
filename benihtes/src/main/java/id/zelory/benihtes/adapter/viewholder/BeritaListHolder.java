@@ -19,10 +19,13 @@ package id.zelory.benihtes.adapter.viewholder;
 import android.view.View;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding.widget.RxTextView;
+
 import butterknife.Bind;
 import id.zelory.benih.adapter.viewholder.BenihListViewHolder;
 import id.zelory.benihtes.R;
 import id.zelory.benihtes.model.Berita;
+import timber.log.Timber;
 
 /**
  * Created by zetbaitsu on 7/29/15.
@@ -34,6 +37,8 @@ public class BeritaListHolder extends BenihListViewHolder<Berita>
     public BeritaListHolder(View itemView)
     {
         super(itemView);
+        RxTextView.textChanges(judul)
+                .subscribe(charSequence -> Timber.d(charSequence.toString()));
     }
 
     @Override

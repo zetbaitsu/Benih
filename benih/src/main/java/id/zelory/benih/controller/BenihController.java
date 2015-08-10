@@ -27,7 +27,6 @@ import timber.log.Timber;
 public abstract class BenihController<P extends BenihController.Presenter>
 {
     protected P presenter;
-    protected Subscription subscription;
 
     public BenihController(P presenter)
     {
