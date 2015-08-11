@@ -30,7 +30,7 @@ repositories {
 }
 
 dependencies {
-    compile 'id.zelory.benih:benih:0.1.6'
+    compile 'id.zelory.benih:benih:0.1.7'
 }
 ```
 
@@ -40,12 +40,14 @@ Berikut ini adalah salah satu contoh penggunaan Benih untuk melakukan parsing JS
 ```java
 public class Berita
 {
-    public String judul;
-    public String alamat;
-    public String gambar;
-    public String tanggal;
-    public String deskripsi;
-    public String isi;
+    private String judul;
+    private String alamat;
+    private String gambar;
+    private String tanggal;
+    private String deskripsi;
+    private String isi;
+
+    //Getter and Setter...
 }
 ```
 #API Services
