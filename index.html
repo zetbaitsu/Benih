@@ -5,7 +5,7 @@
     <title>Benih by zetbaitsu</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
@@ -52,7 +52,7 @@ repositories {
 }
 
 dependencies {
-    compile <span class="pl-s"><span class="pl-pds">'</span>id.zelory.benih:benih:0.1.2<span class="pl-pds">'</span></span>
+    compile <span class="pl-s"><span class="pl-pds">'</span>id.zelory.benih:benih:0.1.7<span class="pl-pds">'</span></span>
 }</pre></div>
 
 <p>Berikut ini adalah salah satu contoh penggunaan Benih untuk melakukan parsing JSON dari web services (API) yang kemudian akan di ubah ke dalam bentuk Object Java dan kemudian ditampilkan dalam RecyclerView. Sangat mudah dan simple, untuk melihat contoh lainnya silahkan lihat pada aplikasi <a href="https://github.com/zetbaitsu/Benih/tree/master/benihtes">benihtes</a></p>
@@ -62,12 +62,14 @@ dependencies {
 
 <div class="highlight highlight-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">Berita</span>
 {
-    <span class="pl-k">public</span> <span class="pl-smi">String</span> judul;
-    <span class="pl-k">public</span> <span class="pl-smi">String</span> alamat;
-    <span class="pl-k">public</span> <span class="pl-smi">String</span> gambar;
-    <span class="pl-k">public</span> <span class="pl-smi">String</span> tanggal;
-    <span class="pl-k">public</span> <span class="pl-smi">String</span> deskripsi;
-    <span class="pl-k">public</span> <span class="pl-smi">String</span> isi;
+    <span class="pl-k">private</span> <span class="pl-smi">String</span> judul;
+    <span class="pl-k">private</span> <span class="pl-smi">String</span> alamat;
+    <span class="pl-k">private</span> <span class="pl-smi">String</span> gambar;
+    <span class="pl-k">private</span> <span class="pl-smi">String</span> tanggal;
+    <span class="pl-k">private</span> <span class="pl-smi">String</span> deskripsi;
+    <span class="pl-k">private</span> <span class="pl-smi">String</span> isi;
+
+    <span class="pl-c">//Getter and Setter...</span>
 }</pre></div>
 
 <h1>
@@ -236,4 +238,3 @@ limitations under the License.
   
   </body>
 </html>
-
