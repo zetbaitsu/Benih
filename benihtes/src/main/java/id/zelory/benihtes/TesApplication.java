@@ -16,23 +16,19 @@
 
 package id.zelory.benihtes;
 
-import com.squareup.leakcanary.LeakCanary;
+import android.app.Application;
 
-import id.zelory.benih.BenihApplication;
 import timber.log.Timber;
 
 /**
  * Created by zetbaitsu on 7/30/15.
  */
-public class TesApplication extends BenihApplication
-{
+public class TesApplication extends Application {
     @Override
-    public void onCreate()
-    {
+    public void onCreate() {
         super.onCreate();
-        LeakCanary.install(this);
-        if (BuildConfig.DEBUG)
-        {
+
+        if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
     }
