@@ -28,7 +28,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -37,9 +37,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".SecondActivity"/>
+        <activity android:name=".ui.SecondActivity"/>
 
-        <activity android:name=".BacaActivity"/>
+        <activity android:name=".ui.BacaActivity"/>
     </application>
 
 </manifest>

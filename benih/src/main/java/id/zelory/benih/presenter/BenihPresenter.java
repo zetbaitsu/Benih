@@ -14,12 +14,11 @@
  *  limitations under the License.
  */
 
-package id.zelory.benih.util;
+package id.zelory.benih.presenter;
 
-import rx.Observable;
-import rx.subjects.PublishSubject;
-import rx.subjects.SerializedSubject;
-import rx.subjects.Subject;
+import android.os.Bundle;
+
+import timber.log.Timber;
 
 /**
  * Created on : December 09, 2015
@@ -29,27 +28,23 @@ import rx.subjects.Subject;
  * GitHub     : https://github.com/zetbaitsu
  * LinkedIn   : https://id.linkedin.com/in/zetbaitsu
  */
-public enum BenihBus {
-    HARVEST;
-    private final Subject<Object, Object> bus;
+public abstract class BenihPresenter<V extends BenihPresenter.View> {
+    protected V view;
 
-    BenihBus() {
-        bus = new SerializedSubject<>(PublishSubject.create());
+    public BenihPresenter(V view) {
+        this.view = view;
+        Timber.tag(getClass().getSimpleName());
     }
 
-    public static BenihBus pluck() {
-        return HARVEST;
-    }
+    public abstract void saveState(Bundle bundle);
 
-    public void send(Object o) {
-        bus.onNext(o);
-    }
+    public abstract void loadState(Bundle bundle);
 
-    public Observable<Object> receive() {
-        return bus.compose(BenihScheduler.pluck().applySchedulers(BenihScheduler.Type.NEW_THREAD));
-    }
+    public interface View {
+        void showError(Throwable error);
 
-    public boolean hasObservers() {
-        return bus.hasObservers();
+        void showLoading();
+
+        void dismissLoading();
     }
 }

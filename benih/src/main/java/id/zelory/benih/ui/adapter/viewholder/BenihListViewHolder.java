@@ -14,42 +14,26 @@
  *  limitations under the License.
  */
 
-package id.zelory.benih.util;
+package id.zelory.benih.ui.adapter.viewholder;
 
-import rx.Observable;
-import rx.subjects.PublishSubject;
-import rx.subjects.SerializedSubject;
-import rx.subjects.Subject;
+import android.view.View;
+
+import butterknife.ButterKnife;
+import timber.log.Timber;
 
 /**
- * Created on : December 09, 2015
+ * Created on : July 29, 2015
  * Author     : zetbaitsu
  * Name       : Zetra
  * Email      : zetra@mail.ugm.ac.id
  * GitHub     : https://github.com/zetbaitsu
  * LinkedIn   : https://id.linkedin.com/in/zetbaitsu
  */
-public enum BenihBus {
-    HARVEST;
-    private final Subject<Object, Object> bus;
-
-    BenihBus() {
-        bus = new SerializedSubject<>(PublishSubject.create());
+public abstract class BenihListViewHolder<Data> {
+    public BenihListViewHolder(View itemView) {
+        ButterKnife.bind(this, itemView);
+        Timber.tag(getClass().getSimpleName());
     }
 
-    public static BenihBus pluck() {
-        return HARVEST;
-    }
-
-    public void send(Object o) {
-        bus.onNext(o);
-    }
-
-    public Observable<Object> receive() {
-        return bus.compose(BenihScheduler.pluck().applySchedulers(BenihScheduler.Type.NEW_THREAD));
-    }
-
-    public boolean hasObservers() {
-        return bus.hasObservers();
-    }
+    public abstract void bind(Data data);
 }

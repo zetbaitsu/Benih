@@ -20,60 +20,54 @@ import rx.Observable;
 import rx.Subscriber;
 
 /**
- * Created by zetbaitsu on 7/22/15.
+ * Created on : December 09, 2015
+ * Author     : zetbaitsu
+ * Name       : Zetra
+ * Email      : zetra@mail.ugm.ac.id
+ * GitHub     : https://github.com/zetbaitsu
+ * LinkedIn   : https://id.linkedin.com/in/zetbaitsu
  */
-public enum BenihWorker
-{
+public enum BenihWorker {
     HARVEST;
 
-    public static BenihWorker pluck()
-    {
+    public static BenihWorker pluck() {
         return HARVEST;
     }
 
-    public Observable<Object> doInComputation(final Runnable runnable)
-    {
-        return Observable.create(new Observable.OnSubscribe<Object>()
-        {
+    public Observable<Object> doInComputation(final Runnable runnable) {
+        return Observable.create(new Observable.OnSubscribe<Object>() {
             @Override
-            public void call(Subscriber<? super Object> subscriber)
-            {
+            public void call(Subscriber<? super Object> subscriber) {
                 runnable.run();
-                if (!subscriber.isUnsubscribed())
-                {
+                if (!subscriber.isUnsubscribed()) {
                     subscriber.onNext("We are done bro!");
+                    subscriber.onCompleted();
                 }
             }
         }).compose(BenihScheduler.pluck().applySchedulers(BenihScheduler.Type.COMPUTATION));
     }
 
-    public Observable<Object> doInIO(final Runnable runnable)
-    {
-        return Observable.create(new Observable.OnSubscribe<Object>()
-        {
+    public Observable<Object> doInIO(final Runnable runnable) {
+        return Observable.create(new Observable.OnSubscribe<Object>() {
             @Override
-            public void call(Subscriber<? super Object> subscriber)
-            {
+            public void call(Subscriber<? super Object> subscriber) {
                 runnable.run();
-                if (!subscriber.isUnsubscribed())
-                {
+                if (!subscriber.isUnsubscribed()) {
                     subscriber.onNext("We are done bro!");
+                    subscriber.onCompleted();
                 }
             }
         }).compose(BenihScheduler.pluck().applySchedulers(BenihScheduler.Type.IO));
     }
 
-    public Observable<Object> doInNewThread(final Runnable runnable)
-    {
-        return Observable.create(new Observable.OnSubscribe<Object>()
-        {
+    public Observable<Object> doInNewThread(final Runnable runnable) {
+        return Observable.create(new Observable.OnSubscribe<Object>() {
             @Override
-            public void call(Subscriber<? super Object> subscriber)
-            {
+            public void call(Subscriber<? super Object> subscriber) {
                 runnable.run();
-                if (!subscriber.isUnsubscribed())
-                {
+                if (!subscriber.isUnsubscribed()) {
                     subscriber.onNext("We are done bro!");
+                    subscriber.onCompleted();
                 }
             }
         }).compose(BenihScheduler.pluck().applySchedulers(BenihScheduler.Type.NEW_THREAD));

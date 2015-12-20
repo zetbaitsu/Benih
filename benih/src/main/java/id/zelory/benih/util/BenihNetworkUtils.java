@@ -17,8 +17,12 @@
 package id.zelory.benih.util;
 
 /**
- * Created by zetbaitsu on 7/13/15.
+ * Created on : December 09, 2015
+ * Author     : zetbaitsu
+ * Name       : Zetra
+ * Email      : zetra@mail.ugm.ac.id
+ * GitHub     : https://github.com/zetbaitsu
+ * LinkedIn   : https://id.linkedin.com/in/zetbaitsu
  */
-public class BenihNetworkUtils
-{
+public class BenihNetworkUtils {
 }

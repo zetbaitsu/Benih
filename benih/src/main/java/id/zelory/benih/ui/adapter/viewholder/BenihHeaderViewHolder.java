@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Zetra.
+ * Copyright (c) 2015 Zelory.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,42 +14,35 @@
  *  limitations under the License.
  */
 
-package id.zelory.benih.util;
+package id.zelory.benih.ui.adapter.viewholder;
 
-import rx.Observable;
-import rx.subjects.PublishSubject;
-import rx.subjects.SerializedSubject;
-import rx.subjects.Subject;
+import android.os.Bundle;
+import android.view.View;
 
 /**
- * Created on : December 09, 2015
+ * Created on : August 25, 2015
  * Author     : zetbaitsu
  * Name       : Zetra
  * Email      : zetra@mail.ugm.ac.id
  * GitHub     : https://github.com/zetbaitsu
  * LinkedIn   : https://id.linkedin.com/in/zetbaitsu
  */
-public enum BenihBus {
-    HARVEST;
-    private final Subject<Object, Object> bus;
+public abstract class BenihHeaderViewHolder extends BenihItemViewHolder {
+    protected Bundle bundle;
 
-    BenihBus() {
-        bus = new SerializedSubject<>(PublishSubject.create());
+    public BenihHeaderViewHolder(View itemView, Bundle bundle) {
+        super(itemView, null, null);
+        this.bundle = bundle;
     }
 
-    public static BenihBus pluck() {
-        return HARVEST;
+    @Override
+    public void bind(Object o) {
+
     }
 
-    public void send(Object o) {
-        bus.onNext(o);
-    }
+    public abstract void show();
 
-    public Observable<Object> receive() {
-        return bus.compose(BenihScheduler.pluck().applySchedulers(BenihScheduler.Type.NEW_THREAD));
-    }
-
-    public boolean hasObservers() {
-        return bus.hasObservers();
+    public void saveState(Bundle bundle) {
+        this.bundle = bundle;
     }
 }

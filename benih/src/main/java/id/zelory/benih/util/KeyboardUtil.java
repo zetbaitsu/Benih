@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Zetra.
+ * Copyright (c) 2015 Zelory.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,40 +16,28 @@
 
 package id.zelory.benih.util;
 
-import rx.Observable;
-import rx.subjects.PublishSubject;
-import rx.subjects.SerializedSubject;
-import rx.subjects.Subject;
+import android.content.Context;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 /**
- * Created on : December 09, 2015
+ * Created on : August 23, 2015
  * Author     : zetbaitsu
  * Name       : Zetra
  * Email      : zetra@mail.ugm.ac.id
  * GitHub     : https://github.com/zetbaitsu
  * LinkedIn   : https://id.linkedin.com/in/zetbaitsu
  */
-public enum BenihBus {
-    HARVEST;
-    private final Subject<Object, Object> bus;
-
-    BenihBus() {
-        bus = new SerializedSubject<>(PublishSubject.create());
+public class KeyboardUtil {
+    public static void showKeyboard(Context context, View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (view.requestFocus()) {
+            inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+        }
     }
 
-    public static BenihBus pluck() {
-        return HARVEST;
-    }
-
-    public void send(Object o) {
-        bus.onNext(o);
-    }
-
-    public Observable<Object> receive() {
-        return bus.compose(BenihScheduler.pluck().applySchedulers(BenihScheduler.Type.NEW_THREAD));
-    }
-
-    public boolean hasObservers() {
-        return bus.hasObservers();
+    public static void hideKeyboard(Context context, View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

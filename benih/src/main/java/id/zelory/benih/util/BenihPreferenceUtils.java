@@ -20,38 +20,37 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 /**
- * Created by zetbaitsu on 7/10/15.
+ * Created on : December 09, 2015
+ * Author     : zetbaitsu
+ * Name       : Zetra
+ * Email      : zetra@mail.ugm.ac.id
+ * GitHub     : https://github.com/zetbaitsu
+ * LinkedIn   : https://id.linkedin.com/in/zetbaitsu
  */
-public class BenihPreferenceUtils
-{
-    public static void putString(Context context, String key, String isi)
-    {
+public class BenihPreferenceUtils {
+    public static void putString(Context context, String key, String isi) {
         SharedPreferences.Editor editor = context.getSharedPreferences("Zelory", Context.MODE_PRIVATE).edit();
         editor.putString(key, isi);
         editor.apply();
     }
 
-    public static String getString(Context context, String key)
-    {
+    public static String getString(Context context, String key) {
         String isi;
         SharedPreferences sharedPreferences = context.getSharedPreferences("Zelory", Context.MODE_PRIVATE);
         isi = sharedPreferences.getString(key, null);
         return isi;
     }
 
-    public static void putDouble(Context context, String key, double isi)
-    {
+    public static void putDouble(Context context, String key, double isi) {
         SharedPreferences.Editor editor = context.getSharedPreferences("Zelory", Context.MODE_PRIVATE).edit();
         editor.putFloat(key, (float) isi);
         editor.apply();
     }
 
-    public static Double getDouble(Context context, String key)
-    {
+    public static Double getDouble(Context context, String key) {
         double isi;
         SharedPreferences sharedPreferences = context.getSharedPreferences("Zelory", Context.MODE_PRIVATE);
-        switch (key)
-        {
+        switch (key) {
             case "lat":
                 isi = sharedPreferences.getFloat(key, -7.7521492f);
                 break;
@@ -65,17 +64,39 @@ public class BenihPreferenceUtils
         return isi;
     }
 
-    public static void putBoolean(Context context, String key, boolean isi)
-    {
+    public static void putBoolean(Context context, String key, boolean isi) {
         SharedPreferences.Editor editor = context.getSharedPreferences("Zelory", Context.MODE_PRIVATE).edit();
         editor.putBoolean(key, isi);
         editor.apply();
     }
 
-    public static boolean getBoolean(Context context, String key)
-    {
+    public static boolean getBoolean(Context context, String key) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("Zelory", Context.MODE_PRIVATE);
 
         return sharedPreferences.getBoolean(key, false);
+    }
+
+    public static void putInt(Context context, String key, int isi) {
+        SharedPreferences.Editor editor = context.getSharedPreferences("Zelory", Context.MODE_PRIVATE).edit();
+        editor.putInt(key, isi);
+        editor.apply();
+    }
+
+    public static int getInt(Context context, String key) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("Zelory", Context.MODE_PRIVATE);
+
+        return sharedPreferences.getInt(key, 0);
+    }
+
+    public static void putLong(Context context, String key, int isi) {
+        SharedPreferences.Editor editor = context.getSharedPreferences("Zelory", Context.MODE_PRIVATE).edit();
+        editor.putLong(key, isi);
+        editor.apply();
+    }
+
+    public static long getLong(Context context, String key) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("Zelory", Context.MODE_PRIVATE);
+
+        return sharedPreferences.getLong(key, 0);
     }
 }

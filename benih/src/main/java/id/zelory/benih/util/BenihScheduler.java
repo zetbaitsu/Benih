@@ -21,58 +21,52 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by zetbaitsu on 7/12/15.
+ * Created on : December 09, 2015
+ * Author     : zetbaitsu
+ * Name       : Zetra
+ * Email      : zetra@mail.ugm.ac.id
+ * GitHub     : https://github.com/zetbaitsu
+ * LinkedIn   : https://id.linkedin.com/in/zetbaitsu
  */
-public enum BenihScheduler
-{
+public enum BenihScheduler {
     HARVEST;
     private final Observable.Transformer newThread;
     private final Observable.Transformer io;
     private final Observable.Transformer computation;
 
-    BenihScheduler()
-    {
-        newThread = new Observable.Transformer()
-        {
+    BenihScheduler() {
+        newThread = new Observable.Transformer() {
             @Override
-            public Observable call(Object o)
-            {
+            public Observable call(Object o) {
                 return ((Observable) o).subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread());
             }
         };
 
-        io = new Observable.Transformer()
-        {
+        io = new Observable.Transformer() {
             @Override
-            public Observable call(Object o)
-            {
+            public Observable call(Object o) {
                 return ((Observable) o).subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread());
             }
         };
 
-        computation = new Observable.Transformer()
-        {
+        computation = new Observable.Transformer() {
             @Override
-            public Observable call(Object o)
-            {
+            public Observable call(Object o) {
                 return ((Observable) o).subscribeOn(Schedulers.computation())
                         .observeOn(AndroidSchedulers.mainThread());
             }
         };
     }
 
-    public static BenihScheduler pluck()
-    {
+    public static BenihScheduler pluck() {
         return HARVEST;
     }
 
     @SuppressWarnings("unchecked")
-    public <T> Observable.Transformer<T, T> applySchedulers(Type type)
-    {
-        switch (type)
-        {
+    public <T> Observable.Transformer<T, T> applySchedulers(Type type) {
+        switch (type) {
             case NEW_THREAD:
                 return (Observable.Transformer<T, T>) newThread;
             case IO:
@@ -84,8 +78,7 @@ public enum BenihScheduler
         return (Observable.Transformer<T, T>) newThread;
     }
 
-    public enum Type
-    {
+    public enum Type {
         NEW_THREAD, IO, COMPUTATION
     }
 }

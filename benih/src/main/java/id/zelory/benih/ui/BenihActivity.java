@@ -14,12 +14,14 @@
  *  limitations under the License.
  */
 
-package id.zelory.benih.util;
+package id.zelory.benih.ui;
 
-import rx.Observable;
-import rx.subjects.PublishSubject;
-import rx.subjects.SerializedSubject;
-import rx.subjects.Subject;
+import android.os.Bundle;
+
+import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
+
+import butterknife.ButterKnife;
+import timber.log.Timber;
 
 /**
  * Created on : December 09, 2015
@@ -29,27 +31,17 @@ import rx.subjects.Subject;
  * GitHub     : https://github.com/zetbaitsu
  * LinkedIn   : https://id.linkedin.com/in/zetbaitsu
  */
-public enum BenihBus {
-    HARVEST;
-    private final Subject<Object, Object> bus;
-
-    BenihBus() {
-        bus = new SerializedSubject<>(PublishSubject.create());
+public abstract class BenihActivity extends RxAppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(getResourceLayout());
+        ButterKnife.bind(this);
+        Timber.tag(getClass().getSimpleName());
+        onViewReady(savedInstanceState);
     }
 
-    public static BenihBus pluck() {
-        return HARVEST;
-    }
+    protected abstract int getResourceLayout();
 
-    public void send(Object o) {
-        bus.onNext(o);
-    }
-
-    public Observable<Object> receive() {
-        return bus.compose(BenihScheduler.pluck().applySchedulers(BenihScheduler.Type.NEW_THREAD));
-    }
-
-    public boolean hasObservers() {
-        return bus.hasObservers();
-    }
+    protected abstract void onViewReady(Bundle savedInstanceState);
 }

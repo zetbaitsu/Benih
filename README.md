@@ -21,7 +21,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'me.tatarka:gradle-retrolambda:3.2.0'
+        classpath 'me.tatarka:gradle-retrolambda:3.2.3'
     }
 }
 
@@ -30,7 +30,7 @@ repositories {
 }
 
 dependencies {
-    compile 'id.zelory.benih:benih:0.1.7'
+    compile 'id.zelory.benih:benih:0.2.0'
 }
 ```
 
@@ -38,8 +38,7 @@ Berikut ini adalah salah satu contoh penggunaan Benih untuk melakukan parsing JS
 
 #Model
 ```java
-public class Berita
-{
+public class Berita {
     private String judul;
     private String alamat;
     private String gambar;
@@ -52,28 +51,23 @@ public class Berita
 ```
 #API Services
 ```java
-public enum TaniPediaService
-{
+public enum TaniPediaService {
     HARVEST;
     private final Api api;
 
-    TaniPediaService()
-    {
+    TaniPediaService() {
         api = BenihServiceGenerator.createService(Api.class, Api.BASE_URL);
     }
 
-    public static TaniPediaService pluck()
-    {
+    public static TaniPediaService pluck() {
         return HARVEST;
     }
 
-    public Api getApi()
-    {
+    public Api getApi() {
         return api;
     }
 
-    public interface Api
-    {
+    public interface Api {
         String BASE_URL = "http://alamat-api.com";
 
         @GET("/berita")
@@ -82,26 +76,23 @@ public enum TaniPediaService
 }
 ```
 
-#Controller
+#Presenter
 ```java
-public class BeritaController extends BenihController<BeritaController.Presenter>
-{
-    public BeritaController(Presenter presenter)
-    {
-        super(presenter);
+public class BeritaPresenter extends BenihPresenter<BeritaPresenter.View> {
+
+    public BeritaPresenter(View view) {
+        super(view);
     }
 
-    public void loadListBerita()
-    {
+    public void loadListBerita() {
         TaniPediaService.pluck()
                 .getApi()
                 .getAllBerita()
                 .compose(BenihScheduler.pluck().applySchedulers(BenihScheduler.Type.IO))
-                .subscribe(presenter::showListBerita, presenter::showError);
+                .subscribe(view::showListBerita, view::showError);
     }
 
-    public interface Presenter extends BenihController.Presenter
-    {
+    public interface View extends BenihPresenter.View {
         void showListBerita(List<Berita> listBerita);
     }
 }
@@ -109,22 +100,19 @@ public class BeritaController extends BenihController<BeritaController.Presenter
 
 #Adapter
 ```java
-public class BeritaRecyclerAdapter extends BenihRecyclerAdapter<Berita, BeritaHolder>
-{
-    public BeritaRecyclerAdapter(Context context)
-    {
+public class BeritaRecyclerAdapter extends BenihRecyclerAdapter<Berita, BeritaHolder> {
+
+    public BeritaRecyclerAdapter(Context context) {
         super(context);
     }
 
     @Override
-    protected int getItemView(int viewType)
-    {
+    protected int getItemResourceLayout(int viewType) {
         return R.layout.item_berita;
     }
 
     @Override
-    public BeritaHolder onCreateViewHolder(ViewGroup parent, int viewType)
-    {
+    public BeritaHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new BeritaHolder(getView(parent, viewType), itemClickListener, longItemClickListener);
     }
 }
@@ -132,56 +120,48 @@ public class BeritaRecyclerAdapter extends BenihRecyclerAdapter<Berita, BeritaHo
 
 #ItemViewHolder
 ```java
-public class BeritaHolder extends BenihViewHolder<Berita>
-{
+public class BeritaHolder extends BenihItemViewHolder<Berita> {
     @Bind(R.id.text) TextView judul;
 
-    public BeritaHolder(View itemView, OnItemClickListener itemClickListener, OnLongItemClickListener longItemClickListener)
-    {
+    public BeritaHolder(View itemView, OnItemClickListener itemClickListener, OnLongItemClickListener longItemClickListener) {
         super(itemView, itemClickListener, longItemClickListener);
     }
 
     @Override
-    public void bind(Berita berita)
-    {
-        judul.setText(berita.judul);
+    public void bind(Berita berita) {
+        judul.setText(berita.getJudul());
     }
 }
 ```
 
 #Activity atau Fragment
 ```java
-public class MainActivity extends BenihActivity implements BeritaController.Presenter
-{
+public class MainActivity extends BenihActivity implements BeritaPresenter.View {
     @Bind(R.id.recycler_view) BenihRecyclerView recyclerView;
-    private BeritaController beritaController;
+    private BeritaPresenter beritaPresenter;
     private BeritaRecyclerAdapter adapter;
 
     @Override
-    protected int getActivityView()
-    {
+    protected int getResourceLayout() {
         return R.layout.activity_main;
     }
 
     @Override
-    protected void onViewReady(Bundle savedInstanceState)
-    {
+    protected void onViewReady(Bundle savedInstanceState) {
         adapter = new BeritaRecyclerAdapter(this);
         recyclerView.setUpAsList();
         recyclerView.setAdapter(adapter);
-        beritaController = new BeritaController(this);
-        beritaController.loadListBerita();
+        beritaPresenter = new BeritaPresenter(this);
+        beritaPresenter.loadListBerita();
     }
 
     @Override
-    public void showListBerita(List<Berita> listBerita)
-    {
+    public void showListBerita(List<Berita> listBerita) {
         adapter.add(listBerita);
     }
 
     @Override
-    public void showError(Throwable throwable)
-    {
+    public void showError(Throwable throwable) {
         Snackbar.make(recyclerView, "Tidak dapat terhubung ke server!", Snackbar.LENGTH_LONG).show();
     }
 }

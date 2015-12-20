@@ -14,27 +14,25 @@
  *  limitations under the License.
  */
 
-package id.zelory.benih;
+package id.zelory.benihtes.ui.adapter;
 
-import android.app.Application;
+import android.support.v4.app.FragmentManager;
 
-import timber.log.Timber;
+import java.util.List;
+
+import id.zelory.benih.ui.adapter.BenihPagerAdapter;
+import id.zelory.benihtes.ui.fragment.BacaFragment;
 
 /**
- * Created on : December 09, 2015
- * Author     : zetbaitsu
- * Name       : Zetra
- * Email      : zetra@mail.ugm.ac.id
- * GitHub     : https://github.com/zetbaitsu
- * LinkedIn   : https://id.linkedin.com/in/zetbaitsu
+ * Created by zetbaitsu on 7/12/15.
  */
-public class BenihApplication extends Application {
+public class BacaPagerAdapter extends BenihPagerAdapter<BacaFragment> {
+    public BacaPagerAdapter(FragmentManager fm, List<BacaFragment> bacaFragments) {
+        super(fm, bacaFragments);
+    }
+
     @Override
-    public void onCreate() {
-        super.onCreate();
-        if (BuildConfig.DEBUG) {
-            Timber.plant(new Timber.DebugTree());
-            Timber.tag(getClass().getSimpleName());
-        }
+    public BacaFragment getItem(int position) {
+        return fragments.get(position);
     }
 }

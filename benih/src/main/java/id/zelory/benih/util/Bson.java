@@ -24,15 +24,18 @@ import com.google.gson.internal.bind.DateTypeAdapter;
 import java.util.Date;
 
 /**
- * Created by zetbaitsu on 7/27/15.
+ * Created on : December 09, 2015
+ * Author     : zetbaitsu
+ * Name       : Zetra
+ * Email      : zetra@mail.ugm.ac.id
+ * GitHub     : https://github.com/zetbaitsu
+ * LinkedIn   : https://id.linkedin.com/in/zetbaitsu
  */
-public enum Bson
-{
+public enum Bson {
     HARVEST;
     private final Gson parser;
 
-    Bson()
-    {
+    Bson() {
         parser = new GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .setPrettyPrinting()
@@ -40,13 +43,11 @@ public enum Bson
                 .create();
     }
 
-    public static Bson pluck()
-    {
+    public static Bson pluck() {
         return HARVEST;
     }
 
-    public Gson getParser()
-    {
+    public Gson getParser() {
         return parser;
     }
 }
