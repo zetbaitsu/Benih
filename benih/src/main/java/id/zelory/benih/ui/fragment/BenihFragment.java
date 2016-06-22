@@ -28,6 +28,7 @@ import android.view.ViewGroup;
 import com.trello.rxlifecycle.components.support.RxFragment;
 
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import id.zelory.benih.ui.BenihActivity;
 import timber.log.Timber;
 
@@ -41,6 +42,7 @@ import timber.log.Timber;
  */
 public abstract class BenihFragment<Data extends Parcelable> extends RxFragment {
     protected Data data;
+    private Unbinder unbinder;
 
     public BenihFragment() {
 
@@ -56,7 +58,7 @@ public abstract class BenihFragment<Data extends Parcelable> extends RxFragment 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(getResourceLayout(), container, false);
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
         return view;
     }
 
@@ -90,7 +92,7 @@ public abstract class BenihFragment<Data extends Parcelable> extends RxFragment 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     @Override
